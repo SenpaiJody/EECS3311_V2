@@ -1,4 +1,4 @@
-package gui;
+package CommandLineTester;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import nutrientService.NutrientServiceFactory;
 
 
 //a temporary class just for testing. to be removed in final implementation.
-public class CLI {
+public class Jody {
 
 	public static void main(String[] args) throws IOException {
 
