@@ -1,0 +1,10 @@
+user_pwd.csv
+	userID,password
+
+user_profiles
+	userID,profileID
+
+profile_data
+	userID,genderID,name,DoB(yyyy--mm-dd),height, weight
+
+unique_profileID
