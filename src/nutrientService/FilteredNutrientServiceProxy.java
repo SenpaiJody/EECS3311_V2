@@ -1,5 +1,7 @@
 package nutrientService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -72,5 +74,13 @@ class FilteredNutrientServiceProxy implements INutrientService{
 				original.put(ALLOWED_NUTRIENT_IDS[i],0.d);
 		}
 		return original;
+	}
+	
+	public List<Integer> getAllNutrientIDs(){
+		List<Integer> retVal = new ArrayList<Integer>(ALLOWED_NUTRIENT_IDS.length);
+		for (int i =0 ; i < ALLOWED_NUTRIENT_IDS.length; i++) {
+			retVal.add(ALLOWED_NUTRIENT_IDS[i]);
+		}
+		return retVal;
 	}
 }

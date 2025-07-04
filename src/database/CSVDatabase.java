@@ -577,5 +577,16 @@ public class CSVDatabase implements IFoodDB, IUserDB, IIngredientDB, INutrientSe
 		return iterator;
 	}
 
+	@Override
+	public List<Integer> getAllNutrientIDs() {
+		List<Integer> ids = new ArrayList<Integer>();
+		readAndExecute(nutrient_name_csv, (String line)->{
+			String[] elements = smartSplit(line);		
+			ids.add(Integer.parseInt(elements[0]));
+			return true;
+		});
+		return ids;
+	}
+
 
 }

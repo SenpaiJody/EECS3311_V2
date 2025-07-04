@@ -18,4 +18,6 @@ public interface INutrientService {
 	public String getNutrientName(int nutrientID);
 	//erturns a nutrient's units when given an ID
 	public String getNutrientUnit(int nutrientID);
+	
+	public List<Integer> getAllNutrientIDs();
 }
