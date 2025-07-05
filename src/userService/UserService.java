@@ -1,7 +1,7 @@
 package userService;
 
 //represents a concrete implementation of IUserService implementing the common logic that has to do with the Users and Profiles
-class UserService implements IUserService{
+ class UserService implements IUserService{
 	
 	//"contract" to a user database
 	private IUserDB db;
@@ -56,6 +56,6 @@ class UserService implements IUserService{
 	}
 
 
-	
-	
+
+
 }

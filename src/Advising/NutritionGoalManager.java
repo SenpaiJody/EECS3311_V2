@@ -110,4 +110,10 @@ public class NutritionGoalManager implements INutritionGoalManager {
         }
         return null; // Goal not found
     }
+    @Override
+    public void setGoal(NutritionGoal goal) {
+        // Store goal logic (replace with proper saving logic)
+        System.out.println("Goal saved: " + goal.getgoalId());
+    }
+
 }

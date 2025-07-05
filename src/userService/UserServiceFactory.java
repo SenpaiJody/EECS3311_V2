@@ -13,4 +13,9 @@ public class UserServiceFactory {
 			obj = new UserService(new CSVDatabase());
 		return obj;
 	}
+
+
+	public static IUserService create() {
+		return null;
+	}
 }

@@ -1,5 +1,8 @@
 package userService;
 
+import userService.Profile;
+import userService.User;
+
 //interface for everything that has to deal with users and profiles
 public interface IUserService {
 	//returns the "current" user. The "current" user is the user either most recently created or most recently logged into with a successful call of attemptLogin(...)
@@ -22,4 +25,8 @@ public interface IUserService {
 	
 	//generates a unique profile ID;
 	public int generateProfileID();
+
+	/* Temporary simplification
+	void saveProfile(Profile profile);
+	User getUserProfile();*/
 }

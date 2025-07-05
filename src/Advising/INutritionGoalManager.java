@@ -16,7 +16,9 @@ public interface INutritionGoalManager{
     public boolean updateGoal(Integer profileId, int goalId, Integer newNutrientId, int newIntensity, GoalType newGoalType, Integer newIngredientId);
     
     public NutritionGoal findGoal(Integer profileId, int goalId);
-    
+
+    void setGoal(NutritionGoal goal);
+
 //    void validateInputs(int nutrientId, int intensity, Integer ingredientId);
 	
 }

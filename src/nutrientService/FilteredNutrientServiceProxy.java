@@ -83,4 +83,14 @@ class FilteredNutrientServiceProxy implements INutrientService{
 		}
 		return retVal;
 	}
+
+	@Override
+	public List<String> getSupportedNutrients() {
+		return List.of();
+	}
+
+	@Override
+	public int getNutrientIdByName(String name) {
+		return 0;
+	}
 }

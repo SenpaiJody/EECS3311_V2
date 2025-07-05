@@ -20,4 +20,7 @@ public interface INutrientService {
 	public String getNutrientUnit(int nutrientID);
 	
 	public List<Integer> getAllNutrientIDs();
+	List<String> getSupportedNutrients();
+	//get nutruientID fri it's name in NutrionGoalUI
+	int getNutrientIdByName(String name);
 }
