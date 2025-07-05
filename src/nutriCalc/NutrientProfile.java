@@ -5,7 +5,7 @@
  * @author kunjalarora
  *
  */
-package nutritionCalculation;
+package nutriCalc;
 
 import java.util.*;
 import nutrientService.INutrientService;
