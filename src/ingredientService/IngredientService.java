@@ -60,7 +60,13 @@ public class IngredientService implements IIngredientService{
 		while (pq.size() > 0) {
 			retVal.add(pq.poll().getKey());
 		}
-		return retVal.reversed();
+		
+		List<Integer> reversed = new ArrayList<Integer>(retVal.size());
+		for (int i = retVal.size()-1; i >= 0; i--) {
+			reversed.add(retVal.get(i));
+		}
+		
+		return reversed;
 	}	
 	
 	
