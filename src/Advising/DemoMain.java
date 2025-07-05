@@ -18,7 +18,7 @@ public class DemoMain {
         printIngredients(originalIngredients);
         
         // Create command-based food swap
-        CommandBasedFoodSwap foodSwap = new CommandBasedFoodSwap();
+        IApplySwapService foodSwap = new CommandBasedFoodSwap();
         
         // Execute first swap: replace ingredient 101 with 201
         System.out.println("\n--- Executing Swap 1: Replace ingredient 101 with 201 ---");
@@ -116,17 +116,17 @@ public class DemoMain {
         System.out.println("  New Ingredients:");
         printIngredients(result.getNewIngredients());
         
-        System.out.println("  Nutrient Differences:");
-        Map<Integer, Double> differences = result.getNutrientDifferences();
-        if (differences.isEmpty()) {
-            System.out.println("    No nutrient differences found");
-        } else {
-            for (Map.Entry<Integer, Double> entry : differences.entrySet()) {
-                String change = entry.getValue() > 0 ? "increase" : "decrease";
-                System.out.printf("    Nutrient ID %d: %.2f (%s)%n", 
-                    entry.getKey(), Math.abs(entry.getValue()), change);
-            }
-        }
+//        System.out.println("  Nutrient Differences:");
+//        Map<Integer, Double> differences = result.getNutrientDifferences();
+//        if (differences.isEmpty()) {
+//            System.out.println("    No nutrient differences found");
+//        } else {
+//            for (Map.Entry<Integer, Double> entry : differences.entrySet()) {
+//                String change = entry.getValue() > 0 ? "increase" : "decrease";
+//                System.out.printf("    Nutrient ID %d: %.2f (%s)%n", 
+//                    entry.getKey(), Math.abs(entry.getValue()), change);
+//            }
+//        }
     }
     
     /**

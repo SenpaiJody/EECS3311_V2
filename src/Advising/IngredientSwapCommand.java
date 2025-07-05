@@ -14,7 +14,7 @@ public class IngredientSwapCommand implements SwapCommand {
     private final int oldIngredientId;
     private final int newIngredientId;
     private final List<List<Object>> originalIngredients;
-    private final NutritionFacade nutritionFacade;
+    //private final NutritionFacade nutritionFacade;
     private List<List<Object>> swappedIngredients;
     private boolean executed = false;
     
@@ -23,7 +23,7 @@ public class IngredientSwapCommand implements SwapCommand {
         this.oldIngredientId = oldIngredientId;
         this.newIngredientId = newIngredientId;
         this.originalIngredients = deepCopyIngredients(originalIngredients); // Proper deep copy
-        this.nutritionFacade = new NutritionFacade();
+        //this.nutritionFacade = new NutritionFacade();
     }
     
     @Override
@@ -49,12 +49,12 @@ public class IngredientSwapCommand implements SwapCommand {
         }
         
         // Calculate nutrient difference (new - original)
-        Map<Integer, Double> nutrientDifferences = nutritionFacade.calculateNutrientDifference(
-            swappedIngredients, originalIngredients
-        );
-        
+//        Map<Integer, Double> nutrientDifferences = nutritionFacade.calculateNutrientDifference(
+//            swappedIngredients, originalIngredients
+//        );
+//        
         executed = true;
-        return new SwapResult(nutrientDifferences, swappedIngredients);
+        return new SwapResult(/*nutrientDifferences,*/ swappedIngredients);
     }
     
     @Override
@@ -64,13 +64,13 @@ public class IngredientSwapCommand implements SwapCommand {
         }
         
         // Calculate reverse nutrient difference (original - swapped)
-        Map<Integer, Double> reverseNutrientDifferences = nutritionFacade.calculateNutrientDifference(
-            originalIngredients, swappedIngredients
-        );
+//        Map<Integer, Double> reverseNutrientDifferences = nutritionFacade.calculateNutrientDifference(
+//            originalIngredients, swappedIngredients
+//        );
         
         executed = false;
         swappedIngredients = null;
-        return new SwapResult(reverseNutrientDifferences, originalIngredients);
+        return new SwapResult(/*reverseNutrientDifferences,*/ originalIngredients);
     }
     
     @Override

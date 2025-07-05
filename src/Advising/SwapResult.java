@@ -8,17 +8,17 @@ import nutriCalc.NutritionFacade;
  * Result object containing the outcome of a swap operation
  */
 public class SwapResult {
-    private final Map<Integer, Double> nutrientDifferences;
+    //private final Map<Integer, Double> nutrientDifferences;
     private final List<List<Object>> newIngredients;
     
-    public SwapResult(Map<Integer, Double> nutrientDifferences, List<List<Object>> newIngredients) {
-        this.nutrientDifferences = new HashMap<>(nutrientDifferences);
+    public SwapResult(/*Map<Integer, Double> nutrientDifferences,*/ List<List<Object>> newIngredients) {
+        //this.nutrientDifferences = new HashMap<>(nutrientDifferences);
         this.newIngredients = deepCopyIngredients(newIngredients);
     }
     
-    public Map<Integer, Double> getNutrientDifferences() {
-        return new HashMap<>(nutrientDifferences);
-    }
+//    public Map<Integer, Double> getNutrientDifferences() {
+//        return new HashMap<>(nutrientDifferences);
+//    }
     
     public List<List<Object>> getNewIngredients() {
         return deepCopyIngredients(newIngredients);

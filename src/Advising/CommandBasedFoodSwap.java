@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * High-level facade for food swap operations using command pattern
  */
-public class CommandBasedFoodSwap {
+public class CommandBasedFoodSwap implements IApplySwapService {
     private final SwapCommandInvoker invoker;
     
     public CommandBasedFoodSwap() {
