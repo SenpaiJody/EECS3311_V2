@@ -2,7 +2,7 @@ package Advising;
 
 
 import java.util.*;
-import nutritionCalculation.NutritionFacade;
+import nutriCalc.NutritionFacade;
 
 /**
  * Result object containing the outcome of a swap operation
