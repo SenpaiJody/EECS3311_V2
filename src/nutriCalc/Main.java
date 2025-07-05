@@ -17,8 +17,8 @@ public class Main {
         // Demo 1: Calculate nutrition for a recipe
         System.out.println("Demo 1: Recipe Nutrition");
         List<List<Object>> recipe = Arrays.asList(
-            Arrays.asList(4, 200.0),  // 200g of ingredient 4
-            Arrays.asList(2, 150.0)   // 150g of ingredient 2
+            Arrays.asList(4, 200.0) // 200g of ingredient 4
+            // Arrays.asList(2, 150.0)   // 150g of ingredient 2
         );
         
         NutrientProfile profile = nutritionCalculator.calculateNutritionProfiles(recipe);
@@ -26,8 +26,8 @@ public class Main {
         
         // Demo 2: Combine two recipes
         System.out.println("\nDemo 2: Combining Recipes");
-        List<List<Object>> recipe1 = Arrays.asList(Arrays.asList(1, 100.0));
-        List<List<Object>> recipe2 = Arrays.asList(Arrays.asList(2, 100.0));
+        List<List<Object>> recipe1 = Arrays.asList(Arrays.asList(4, 100.0));
+        List<List<Object>> recipe2 = Arrays.asList(Arrays.asList(4, 100.0));
         
         NutrientProfile profile1 = nutritionCalculator.calculateNutritionProfiles(recipe1);
         NutrientProfile profile2 = nutritionCalculator.calculateNutritionProfiles(recipe2);
