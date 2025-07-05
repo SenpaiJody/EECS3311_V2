@@ -5,7 +5,7 @@
  * @author kunjalarora
  *
  */
-package nutriCalc;
+package nutritionCalculation;
 
 import java.util.*;
 import nutrientService.INutrientService;
@@ -73,40 +73,29 @@ class CalculationService {
         return (nutrientPer100g * quantity) / 100.0;
     }
     
-
-    Map<Integer, Double> calculateNutrientDifference(NutrientProfile profile1, NutrientProfile profile2) {
-        Map<Integer, Double> differences = new HashMap<>();
+    /**
+     * Sums nutrients from individual profiles
+     * @param individualProfiles List of maps containing nutrient data
+     * @return Map of summed nutrients
+     */
+    public Map<Integer, Double> sumNutrients(List<Map<Integer, Double>> individualProfiles) {
+        Map<Integer, Double> summedNutrients = new HashMap<>();
         
-        // Get all unique nutrient IDs from both profiles
-        Set<Integer> allNutrientIds = new HashSet<>();
-        allNutrientIds.addAll(profile1.getAllNutrients().keySet());
-        allNutrientIds.addAll(profile2.getAllNutrients().keySet());
-        
-        // Calculate differences for each nutrient
-        for (Integer nutrientId : allNutrientIds) {
-            double value1 = profile1.getAllNutrients().getOrDefault(nutrientId, 0.0);
-            double value2 = profile2.getAllNutrients().getOrDefault(nutrientId, 0.0);
-            double difference = value1 - value2;
-            
-            // Round to 2 decimal places for consistency
-            difference = Math.round(difference * 100.0) / 100.0;
-            
-            // Only include nutrients with non-zero differences (using 0.01 threshold after rounding)
-            if (Math.abs(difference) >= 0.01) {
-                differences.put(nutrientId, difference);
+        for (Map<Integer, Double> profile : individualProfiles) {
+            for (Map.Entry<Integer, Double> entry : profile.entrySet()) {
+                summedNutrients.merge(entry.getKey(), entry.getValue(), Double::sum);
             }
         }
         
-        return differences;
+        return summedNutrients;
     }
-
 }
 
 /**
  * Facade class that simplifies complex nutrition calculations
  * Coordinates between data retrieval and calculation subsystems
  */
-public class NutritionFacade implements INutriCalc{
+public class NutritionFacade {
     private INutrientService nutrientService;
     private CalculationService calculationService;
     
@@ -130,8 +119,13 @@ public class NutritionFacade implements INutriCalc{
             ingredientIds.add((Integer) ingredient.get(0));
         }
         
-        // Get nutrition data per 100g for all ingredients in one call
-        Map<Integer, Map<Integer, Double>> nutritionDataPer100g = nutrientService.getNutrientsListPer100g(ingredientIds);
+        // Get nutrition data per 100g for all ingredients
+        Map<Integer, Map<Integer, Double>> nutritionDataPer100g = new HashMap<>();
+        for (Integer ingredientId : ingredientIds) {
+            List<Integer> singleIngredient = Arrays.asList(ingredientId);
+            Map<Integer, Double> nutrientsFor100g = nutrientService.getNutrientsPer100g(singleIngredient);
+            nutritionDataPer100g.put(ingredientId, nutrientsFor100g);
+        }
         
         // Calculate the nutrition profile
         return calculationService.calculateNutrientProfiles(ingredients, nutritionDataPer100g);
@@ -145,31 +139,5 @@ public class NutritionFacade implements INutriCalc{
     public NutrientProfile combineNutritionProfiles(List<NutrientProfile> profiles) {
         return calculationService.combineNutritionProfiles(profiles);
     }
-    
-    /**
-     * Calculates the difference between two nutrition profiles
-     * Formula: profile1 - profile2
-     * @param profile1 First nutrition profile
-     * @param profile2 Second nutrition profile  
-     * @return Map of nutrient ID to difference value (only nutrients with non-zero differences)
-     */
-    
-    
-    /**
-     * Calculates the nutritional difference between two ingredient lists
-     * Formula: ingredients1 - ingredients2
-     * @param ingredients1 First list of [ingredientId, quantity] pairs
-     * @param ingredients2 Second list of [ingredientId, quantity] pairs
-     * @return Map of nutrient ID to difference value (only nutrients with non-zero differences, positive values mean ingredients1 has more, negative means ingredients2 has more)
-     */
-    public Map<Integer, Double> calculateNutrientDifference(List<List<Object>> ingredients1, List<List<Object>> ingredients2) {
-        // Calculate nutrition profiles for both ingredient lists
-        NutrientProfile profile1 = calculateNutritionProfiles(ingredients1);
-        NutrientProfile profile2 = calculateNutritionProfiles(ingredients2);
-        
-        // Calculate and return the difference
-        return calculationService.calculateNutrientDifference(profile1, profile2);
-    }
-    
-    
 }
+    

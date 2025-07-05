@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import nutriCalc.NutritionFacade;
+import nutritionCalculation.NutritionFacade;
 
 /**
  * Concrete command for ingredient swapping
