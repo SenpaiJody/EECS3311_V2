@@ -1,6 +1,6 @@
 package userService;
 
-import database.CSVDatabase;
+import database.CSVUserDB;
 
 
 //Flyweight Factory class that creates IUserService to be used by clients.
@@ -10,7 +10,7 @@ public class UserServiceFactory {
 	
 	public static IUserService getService() {
 		if (obj == null)
-			obj = new UserService(new CSVDatabase());
+			obj = new UserService(new CSVUserDB());
 		return obj;
 	}
 }

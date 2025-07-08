@@ -165,5 +165,13 @@ public class IngredientService implements IIngredientService{
 		        iterator.next();
 		    }
 	}
+	@Override
+	public int getFoodGroup(int ingredientID) {
+		return db.getFoodGroup(ingredientID);
+	}
+	@Override
+	public String getFoodGroupName(int foodGroupID) {
+		return db.getFoodGroupName(foodGroupID);
+	}
 }
 

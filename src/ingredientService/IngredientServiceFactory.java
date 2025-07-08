@@ -1,6 +1,7 @@
 package ingredientService;
 
-import database.CSVDatabase;
+
+import database.CSVIngredientDB;
 
 //Factory for instantiating IIngredientService objects. A flyweight factory.
 public class IngredientServiceFactory {
@@ -8,7 +9,7 @@ public class IngredientServiceFactory {
 	
 	public static IIngredientService getService() {
 		if (service == null)
-			service = new IngredientService(new CSVDatabase());
+			service = new IngredientService(new CSVIngredientDB());
 		return service;
 	}
 }

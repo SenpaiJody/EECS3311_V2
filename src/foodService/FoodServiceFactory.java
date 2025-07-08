@@ -1,6 +1,6 @@
 package foodService;
 
-import database.CSVDatabase;
+import database.CSVFoodDB;
 
 //sort of flyweight pattern (also may count as the factory patterN0
 public class FoodServiceFactory {
@@ -8,7 +8,7 @@ public class FoodServiceFactory {
 	
 	public static IFoodService getService() {
 		if (obj == null)
-			obj = new FoodService(new CSVDatabase()); //defaulting to using an CSVDatabase temporarily as the implementation.
+			obj = new FoodService(new CSVFoodDB()); //defaulting to using an CSVDatabase temporarily as the implementation.
 		return obj;
 	}
 	
