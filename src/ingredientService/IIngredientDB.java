@@ -13,4 +13,8 @@ public interface IIngredientDB {
 	//gets an iterator through ingredient objects
 	public IIngredientIterator getIterator();
 	
+	//gets the given ingredient's food group ID, or -1 if no food group is associated
+	public int getFoodGroup(int ingredientID);
+	//gets the name of the provided food group ID
+	public String getFoodGroupName(int foodGroupID);
 };
