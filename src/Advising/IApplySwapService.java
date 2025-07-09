@@ -35,5 +35,3 @@ public interface IApplySwapService {
      */
     void clearSwapHistory();
 }
-
-

@@ -17,7 +17,7 @@ public class Main {
         // Demo 1: Calculate nutrition for a recipe
         System.out.println("Demo 1: Recipe Nutrition");
         List<List<Object>> recipe = Arrays.asList(
-            Arrays.asList(4, 200.0)  // 200g of ingredient 4
+            Arrays.asList(4, 100.0)  // 200g of ingredient 4
             //Arrays.asList(2, 150.0)   // 150g of ingredient 2
         );
         
@@ -40,6 +40,17 @@ public class Main {
         System.out.println("\nDemo 3: Recipe Comparison");
         Map<Integer, Double> differences = nutritionCalculator.calculateNutrientDifference(recipe, recipe1);
         printNutrientDifferences("Recipe vs Recipe1", differences);
+        
+     // Test with your actual IDs
+        int ingredientId = 4;  // Replace with real ingredient ID
+        int nutrientId = 401;    // Replace with real nutrient ID
+        
+        // Test the method
+        NutrientProfile result = nutritionCalculator.createIdealIngredient(ingredientId, nutrientId, 25);
+        printNutrientProfile("Ideal", result);
+        
+        System.out.println("Ideal ingredient created with 25% intensity");
+//        System.out.println("If original nutrient was 0g, new value should be 1.5g");
         
         System.out.println("\n=== Demo Complete ===");
     }

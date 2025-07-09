@@ -98,6 +98,49 @@ class CalculationService {
         
         return differences;
     }
+    
+    /**
+     * Creates an ideal ingredient nutrition profile with modified nutrient intensity
+     * @param ingredientId The ID of the base ingredient
+     * @param targetNutrientId The nutrient ID to modify
+     * @param intensityPercentage The percentage change (e.g., 15 for +15% increase, -15 for -15% decrease)
+     * @param nutritionDataPer100g Map of ingredient ID to nutrition data per 100g
+     * @return NutrientProfile with modified nutrient intensity
+     */
+    public NutrientProfile createIdealIngredientProfile(int ingredientId, int targetNutrientId, 
+                                                       double intensityPercentage, 
+                                                       Map<Integer, Map<Integer, Double>> nutritionDataPer100g) {
+        Map<Integer, Double> idealNutrients = new HashMap<>();
+        
+        Map<Integer, Double> originalNutrients = nutritionDataPer100g.get(ingredientId);
+        if (originalNutrients == null) {
+            // Return empty profile if ingredient not found
+            return new NutrientProfile(idealNutrients);
+        }
+        
+        // Copy all original nutrients
+        for (Map.Entry<Integer, Double> nutrientEntry : originalNutrients.entrySet()) {
+            int nutrientId = nutrientEntry.getKey();
+            double originalValue = nutrientEntry.getValue();
+            
+            if (nutrientId == targetNutrientId) {
+                // Apply intensity modification to target nutrient
+                // If original value is 0, use 1g as default base value
+                double baseValue = (originalValue == 0.0) ? 1.0 : originalValue;
+                // Convert percentage change to multiplier: 15% increase = 1.15, -15% decrease = 0.85
+                double multiplier = 1.0 + (intensityPercentage / 100.0);
+                double modifiedValue = baseValue * multiplier;
+                // Round to 2 decimal places for consistency
+                modifiedValue = Math.round(modifiedValue * 100.0) / 100.0;
+                idealNutrients.put(nutrientId, modifiedValue);
+            } else {
+                // Keep original value for other nutrients
+                idealNutrients.put(nutrientId, originalValue);
+            }
+        }
+        
+        return new NutrientProfile(idealNutrients);
+    }
 
 }
 
@@ -168,6 +211,23 @@ public class NutritionFacade implements INutriCalc{
         
         // Calculate and return the difference
         return calculationService.calculateNutrientDifference(profile1, profile2);
+    }
+    
+    /**
+     * Creates an ideal ingredient with modified nutrient intensity
+     * @param ingredientId The ID of the base ingredient
+     * @param nutrientId The nutrient ID to modify
+     * @param intensityPercentage The percentage change (e.g., 15 for +15% increase, -15 for -15% decrease)
+     * @return NutrientProfile representing the ideal ingredient with modified nutrient intensity
+     * Note: If original nutrient value is 0, uses 1g as default base value
+     */
+    public NutrientProfile createIdealIngredient(int ingredientId, int nutrientId, int intensityPercentage) {
+        // Get nutrition data for the specific ingredient
+        List<Integer> ingredientIds = Arrays.asList(ingredientId);
+        Map<Integer, Map<Integer, Double>> nutritionDataPer100g = nutrientService.getNutrientsListPer100g(ingredientIds);
+        
+        // Create and return the ideal ingredient profile
+        return calculationService.createIdealIngredientProfile(ingredientId, nutrientId, intensityPercentage, nutritionDataPer100g);
     }
     
     
