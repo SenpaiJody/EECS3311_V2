@@ -37,4 +37,13 @@ public interface INutriCalc {
      *         positive values mean nutrient in ingredients1(new ingredient) has more, negative means nutreint in ingredients2(old ingredient) has more)
      */
     Map<Integer, Double> calculateNutrientDifference(List<List<Object>> ingredients1, List<List<Object>> ingredients2);
+
+    /**
+     * Calculates the nutritionProfile for a given intensity and nutrientID
+     * @param ingredientID initial ingredient to create the initial profile
+     * @param nutreintID nutreint whose values need changes
+     * @param intensity the percentage by which the nutrient value needs changing
+     * @return NutrientProfile containing calculated nutrition values 
+     */
+    NutrientProfile createIdealIngredient(int ingredientId, int nutrientId, int intensity);
 }

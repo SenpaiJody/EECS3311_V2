@@ -23,4 +23,3 @@ public interface SwapCommand {
      */
     String getDescription();
 }
-
