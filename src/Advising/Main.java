@@ -83,5 +83,18 @@ public class Main {
             System.out.println("  Ingredient ID: " + goal.getingredientId());
             System.out.println();
         }
+        
+     // 4. Create the recommender
+        IFoodRecommendation recommender = new FoodRecommendation();
+
+        // 5. Get top 3 recommended ingredient IDs
+        List<Integer> recommendations = recommender.getRecommendations(newGoal, 3);
+
+        // 6. Print results
+        System.out.println("Top 3 Ingredient Recommendations:");
+        for (Integer id : recommendations) {
+            System.out.println(" - Ingredient ID: " + id);
+        }
+        
     }
 }

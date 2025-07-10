@@ -18,18 +18,18 @@ import nutrientService.NutrientServiceFactory;
 class CalculationService {
     
     /**
-     * Calculates nutrition profiles for a list of ingredients with their quantities
-     * @param ingredients List of [ingredientId, quantity] pairs
+     * Calculates nutrition profiles for a map of ingredients with their quantities
+     * @param ingredients Map of ingredientId to quantity
      * @param nutritionDataPer100g Map of ingredient ID to nutrition data per 100g
      * @return NutrientProfile containing calculated values
      */
-    public NutrientProfile calculateNutrientProfiles(List<List<Object>> ingredients, 
+    public NutrientProfile calculateNutrientProfiles(Map<Integer, Double> ingredients, 
                                                    Map<Integer, Map<Integer, Double>> nutritionDataPer100g) {
         Map<Integer, Double> totalNutrients = new HashMap<>();
         
-        for (List<Object> ingredient : ingredients) {
-            int ingredientId = (Integer) ingredient.get(0);
-            double quantity = (Double) ingredient.get(1);
+        for (Map.Entry<Integer, Double> ingredient : ingredients.entrySet()) {
+            int ingredientId = ingredient.getKey();
+            double quantity = ingredient.getValue();
             
             Map<Integer, Double> ingredientNutrients = nutritionDataPer100g.get(ingredientId);
             if (ingredientNutrients != null) {
@@ -141,14 +141,32 @@ class CalculationService {
         
         return new NutrientProfile(idealNutrients);
     }
-
+    
+    /**
+     * Aggregates duplicate ingredients in a list by summing their quantities
+     * @param ingredients List of [ingredientId, quantity] pairs that may contain duplicates
+     * @return Map of ingredientId to total quantity (duplicates aggregated)
+     */
+    public Map<Integer, Double> aggregateIngredients(List<List<Object>> ingredients) {
+        Map<Integer, Double> aggregatedIngredients = new HashMap<>();
+        
+        for (List<Object> ingredient : ingredients) {
+            int ingredientId = (Integer) ingredient.get(0);
+            double quantity = (Double) ingredient.get(1);
+            
+            // Use merge to add quantities for duplicate ingredients
+            aggregatedIngredients.merge(ingredientId, quantity, Double::sum);
+        }
+        
+        return aggregatedIngredients;
+    }
 }
 
 /**
  * Facade class that simplifies complex nutrition calculations
  * Coordinates between data retrieval and calculation subsystems
  */
-public class NutritionFacade implements INutriCalc{
+public class NutritionFacade implements INutriCalc {
     private INutrientService nutrientService;
     private CalculationService calculationService;
     
@@ -157,26 +175,78 @@ public class NutritionFacade implements INutriCalc{
         this.calculationService = new CalculationService();
     }
     
+    
+    /**
+     * Method that takes a list of ingredient maps and aggregates them before calculating nutrition profile
+     * This allows you to have multiple maps with potentially overlapping ingredients that will be summed
+     * @param ingredientMaps List of maps, each containing ingredientId to quantity mappings
+     * @return NutrientProfile containing calculated nutrition values with aggregated ingredients
+     */
+    public NutrientProfile calculateNutritionProfilesFromMaps(List<Map<Integer, Double>> ingredientMaps) {
+        Map<Integer, Double> aggregatedIngredients = new HashMap<>();
+        
+        // Aggregate all ingredient maps from the list
+        for (Map<Integer, Double> ingredientMap : ingredientMaps) {
+            for (Map.Entry<Integer, Double> entry : ingredientMap.entrySet()) {
+                aggregatedIngredients.merge(entry.getKey(), entry.getValue(), Double::sum);
+            }
+        }
+        
+        // Use the single map method with aggregated ingredients
+        return calculateNutritionProfiles(aggregatedIngredients);
+    }
+    
+    
     /**
      * Main method that takes ingredients with quantities and provides complete nutrition profile
      * Takes ingredients + per100g data, applies formula: (nutrientPer100g x quantity) ÷ 100
-     * Creates one NutrientProfile for the list
+     * Creates one NutrientProfile for the map
      * 
-     * @param ingredients List of [ingredientId, quantity] pairs
+     * @param ingredients Map of ingredientId to quantity
      * @return NutrientProfile containing calculated nutrition values
      */
-    public NutrientProfile calculateNutritionProfiles(List<List<Object>> ingredients) {
+    public NutrientProfile calculateNutritionProfiles(Map<Integer, Double> ingredients) {
         // Extract ingredient IDs for data retrieval
-        List<Integer> ingredientIds = new ArrayList<>();
-        for (List<Object> ingredient : ingredients) {
-            ingredientIds.add((Integer) ingredient.get(0));
-        }
+        List<Integer> ingredientIds = new ArrayList<>(ingredients.keySet());
         
         // Get nutrition data per 100g for all ingredients in one call
         Map<Integer, Map<Integer, Double>> nutritionDataPer100g = nutrientService.getNutrientsListPer100g(ingredientIds);
         
         // Calculate the nutrition profile
         return calculationService.calculateNutrientProfiles(ingredients, nutritionDataPer100g);
+    }
+    
+    /**
+     * Method that aggregates ingredients from multiple Maps before calculating nutrition profile
+     * Useful when you have multiple ingredient sources that need to be combined
+     * @param ingredientMaps Multiple maps of ingredientId to quantity that should be aggregated
+     * @return NutrientProfile containing calculated nutrition values with aggregated ingredients
+     */
+//    public NutrientProfile calculateNutritionProfiles(Map<Integer, Double>... ingredientMaps) {
+//        Map<Integer, Double> aggregatedIngredients = new HashMap<>();
+//        
+//        // Aggregate all ingredient maps
+//        for (Map<Integer, Double> ingredientMap : ingredientMaps) {
+//            for (Map.Entry<Integer, Double> entry : ingredientMap.entrySet()) {
+//                aggregatedIngredients.merge(entry.getKey(), entry.getValue(), Double::sum);
+//            }
+//        }
+//        
+//        // Use the single map method with aggregated ingredients
+//        return calculateNutritionProfiles(aggregatedIngredients);
+//    }
+    
+    /**
+     * Overloaded method to maintain backward compatibility with List<List<Object>> format
+     * This method now properly aggregates duplicate ingredients by summing their quantities
+     * @param ingredients List of [ingredientId, quantity] pairs (duplicates will be aggregated)
+     * @return NutrientProfile containing calculated nutrition values
+     */
+    public NutrientProfile calculateNutritionProfiles(List<List<Object>> ingredients) {
+        // Convert List<List<Object>> to Map<Integer, Double> while aggregating duplicates
+        Map<Integer, Double> aggregatedIngredients = calculationService.aggregateIngredients(ingredients);
+        
+        return calculateNutritionProfiles(aggregatedIngredients);
     }
     
     /**
@@ -189,28 +259,36 @@ public class NutritionFacade implements INutriCalc{
     }
     
     /**
-     * Calculates the difference between two nutrition profiles
-     * Formula: profile1 - profile2
-     * @param profile1 First nutrition profile
-     * @param profile2 Second nutrition profile  
+     * Calculates the nutritional difference between two ingredient maps
+     * Formula: ingredients1 - ingredients2
+     * @param ingredients1 First map of ingredientId to quantity
+     * @param ingredients2 Second map of ingredientId to quantity
      * @return Map of nutrient ID to difference value (only nutrients with non-zero differences)
      */
-    
-    
-    /**
-     * Calculates the nutritional difference between two ingredient lists
-     * Formula: ingredients1 - ingredients2
-     * @param ingredients1 First list of [ingredientId, quantity] pairs
-     * @param ingredients2 Second list of [ingredientId, quantity] pairs
-     * @return Map of nutrient ID to difference value (only nutrients with non-zero differences, positive values mean ingredients1 has more, negative means ingredients2 has more)
-     */
-    public Map<Integer, Double> calculateNutrientDifference(List<List<Object>> ingredients1, List<List<Object>> ingredients2) {
-        // Calculate nutrition profiles for both ingredient lists
-        NutrientProfile profile1 = calculateNutritionProfiles(ingredients1);
-        NutrientProfile profile2 = calculateNutritionProfiles(ingredients2);
+    public Map<Integer, Double> calculateNutrientDifference(Map<Integer, Double> ingredientsNew, 
+                                                           Map<Integer, Double> ingredientsOld) {
+        // Calculate nutrition profiles for both ingredient maps
+        NutrientProfile profile1 = calculateNutritionProfiles(ingredientsNew);
+        NutrientProfile profile2 = calculateNutritionProfiles(ingredientsOld);
         
         // Calculate and return the difference
         return calculationService.calculateNutrientDifference(profile1, profile2);
+    }
+    
+    /**
+     * Overloaded method to maintain backward compatibility with List<List<Object>> format
+     * This method now properly aggregates duplicate ingredients in both lists
+     * @param ingredients1 First list of [ingredientId, quantity] pairs
+     * @param ingredients2 Second list of [ingredientId, quantity] pairs
+     * @return Map of nutrient ID to difference value
+     */
+    public Map<Integer, Double> calculateNutrientDifference(List<List<Object>> ingredientsNew, 
+                                                           List<List<Object>> ingredientsOld) {
+        // Convert both lists to maps while aggregating duplicates
+        Map<Integer, Double> map1 = calculationService.aggregateIngredients(ingredientsNew);
+        Map<Integer, Double> map2 = calculationService.aggregateIngredients(ingredientsOld);
+        
+        return calculateNutrientDifference(map1, map2);
     }
     
     /**
@@ -229,6 +307,4 @@ public class NutritionFacade implements INutriCalc{
         // Create and return the ideal ingredient profile
         return calculationService.createIdealIngredientProfile(ingredientId, nutrientId, intensityPercentage, nutritionDataPer100g);
     }
-    
-    
 }

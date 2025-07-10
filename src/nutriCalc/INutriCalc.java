@@ -10,6 +10,13 @@ import java.util.Map;
  * and calculating nutritional differences between ingredients
  */
 public interface INutriCalc {
+	
+	
+	NutrientProfile calculateNutritionProfiles(Map<Integer, Double> ingredients);
+	Map<Integer, Double> calculateNutrientDifference(Map<Integer, Double> ingredients1, Map<Integer, Double> ingredients2);
+	NutrientProfile calculateNutritionProfilesFromMaps(List<Map<Integer, Double>> ingredientMaps);
+	
+	
     
     /**
      * Main method that takes ingredients with quantities and provides complete nutrition profile

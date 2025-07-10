@@ -1,6 +1,7 @@
 package nutriCalc;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,8 @@ public class Main {
         // Demo 1: Calculate nutrition for a recipe
         System.out.println("Demo 1: Recipe Nutrition");
         List<List<Object>> recipe = Arrays.asList(
-            Arrays.asList(4, 100.0)  // 200g of ingredient 4
-            //Arrays.asList(2, 150.0)   // 150g of ingredient 2
+            Arrays.asList(4, 200.0) // 200g of ingredient 4
+//            Arrays.asList(2, 50.0)   // 150g of ingredient 2
         );
         
         NutrientProfile profile = nutritionCalculator.calculateNutritionProfiles(recipe);
@@ -51,6 +52,25 @@ public class Main {
         
         System.out.println("Ideal ingredient created with 25% intensity");
 //        System.out.println("If original nutrient was 0g, new value should be 1.5g");
+        
+        
+     // Demo: Calculate nutrition for a recipe using List of Maps
+        System.out.println("\nDemo: Recipe Nutrition (List of Maps)");
+
+        // Create multiple maps - each representing a portion or ingredient group
+        Map<Integer, Double> portion1 = new HashMap<>();
+        portion1.put(4, 100.0); // 100g of ingredient 4
+
+        Map<Integer, Double> portion2 = new HashMap<>();
+        portion2.put(4, 100.0); // Another 100g of ingredient 4 (will be aggregated)
+        portion2.put(2, 50.0);  // 50g of ingredient 2
+
+        // Put them in a list
+        List<Map<Integer, Double>> ingredientMaps = Arrays.asList(portion1, portion2);
+
+        // Calculate nutrition - duplicates will be aggregated automatically
+        NutrientProfile profileListMaps = nutritionCalculator.calculateNutritionProfilesFromMaps(ingredientMaps);
+        printNutrientProfile("Recipe (List of Maps)", profileListMaps);
         
         System.out.println("\n=== Demo Complete ===");
     }
