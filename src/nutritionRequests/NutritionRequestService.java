@@ -1,6 +1,6 @@
 package nutritionRequests;
 
-import Advising.NutritionGoal;
+import advisingTestForVisualization.NutritionGoal;
 import foodService.Filter;
 
 public class NutritionRequestService implements INutritionRequestService {

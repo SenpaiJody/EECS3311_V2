@@ -46,10 +46,18 @@ public class FoodBuilder {
 		this.id = id;
 	}
 	
-	//get the created food
-	public Food getResult() {
+	//get the created food; throws an exception if there is not enough data to build the food
+	public Food getResult() throws IncompleteFoodException {
+		if (ingredients.size() == 0)
+			throw new IncompleteFoodException("A Food cannot be created with zero ingredients");
+		if (foodType == null)
+			throw new IncompleteFoodException("A Food type must be specified");
+		if (date == null)
+			throw new IncompleteFoodException("The Food's Date must be specified");
+		if (name == null || name.length() == 0)
+			throw new IncompleteFoodException("The Food must have a name!");
 		if (id == null)
-			return new Food(FoodServiceFactory.getService().generateFoodID(), name, ingredients, date, foodType);
+			id = FoodServiceFactory.getService().generateFoodID();
 		return new Food(id, name, ingredients, date, foodType);
 	}
 }

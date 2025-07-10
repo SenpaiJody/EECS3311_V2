@@ -7,6 +7,10 @@ import java.util.Map.Entry;
 import food.Food;
 import nutritionRequests.Nutrient;
 
+/*VisualCalculation Service performs the various calculations requested by graphService
+ * 
+ */
+
 public interface IVisualCalculationService {
 
 	String getMealTag(Food meal);

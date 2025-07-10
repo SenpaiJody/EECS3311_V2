@@ -1,4 +1,4 @@
-package Advising;
+package advisingTestForVisualization;
 
 
 import java.time.LocalDate;
@@ -10,16 +10,16 @@ import food.Lunch;
 
 //hard coded for demo purposes
 
-public class AdvisingService {
+public class AdvisingServiceTestforVisualization {
 	//private NutriCalc calc;
 	
 	
 
-	public AdvisingService() {
+	public AdvisingServiceTestforVisualization() {
 
 	}
 	
-	public List<Food> produceSwapMeals(Filter filter){
+	public List<Food> produceSwapMeals(List<Food> mealList){
 		List<Food> swapMealList = new ArrayList<>();
 		
     	Lunch lunch = new Lunch();

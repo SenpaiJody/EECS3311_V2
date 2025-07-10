@@ -5,7 +5,8 @@ import java.time.LocalDate;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import Advising.*;
+
+import advisingTestForVisualization.*;
 import nutritionRouting.*;
 import userService.IUserService;
 import userService.IncorrectLoginException;
@@ -97,7 +98,7 @@ public class MainDemo {
 		
 		// Nutrient choice: Only for NutrientByDateGraphRequests / Line graph requests
 		// Default could be PROTEIN if not chosen
-		Nutrient nutrientChoice=Nutrient.SODIUM;
+		Nutrient nutrientChoice=Nutrient.POTASSIUM;
 		
 		if (nutrientChoice == null) {
 			nutrientChoice = Nutrient.PROTEIN;

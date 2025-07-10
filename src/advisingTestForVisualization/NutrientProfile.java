@@ -1,4 +1,4 @@
-package Advising;
+package advisingTestForVisualization;
 
 import java.util.HashMap;
 import java.util.Map;

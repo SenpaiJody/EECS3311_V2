@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.jfree.chart.JFreeChart;
 
-import Advising.NutritionGoal;
+import advisingTestForVisualization.NutritionGoal;
 import foodService.Filter;
 import graphService.GraphRequestVisitor;
 

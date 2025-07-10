@@ -1,13 +1,13 @@
 package nutrientService;
 
-import database.CSVDatabase;
+import database.CSVNutrientDB;
 
 public class NutrientServiceFactory {
 	private static INutrientService service;
 	
 	public static INutrientService getService() {
 		if (service == null)
-			service = new FilteredNutrientServiceProxy(new CSVDatabase());
+			service = new FilteredNutrientServiceProxy(new CSVNutrientDB());
 		return service;
 	}
 }

@@ -8,6 +8,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+
+/*VisualizationService actually performs the formatting of the graphService collected data into a JFreeChart
+ * 
+ */
+
 public interface IVisualizationService {
 
     //    LocalDate dateStart, LocalDate dateEnd 
@@ -53,7 +58,6 @@ public interface IVisualizationService {
 	// works for both avg and total, one map function for historical, no CFG
     void populatePieGraphDataset(DefaultPieDataset<String> dataset, Map<Integer, Double> mealListNutrientAmounts);
 
-    
     void populateFoodGroupPieGraphDataset(DefaultPieDataset<String> dataset, Map<String, Double> foodGroupPercentages);
     
 	// one map function for historical, no CFG

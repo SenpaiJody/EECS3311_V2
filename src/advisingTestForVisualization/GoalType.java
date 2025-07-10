@@ -1,4 +1,4 @@
-package Advising;
+package advisingTestForVisualization;
 
 public enum GoalType {
     INCREASE,

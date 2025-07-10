@@ -1,11 +1,9 @@
 package nutritionRouting;
 
 
-import Advising.*;
-
 import java.util.List;
-
 import org.jfree.chart.JFreeChart;
+import advisingTestForVisualization.*;
 import foodService.*;
 import graphService.*;
 import nutritionRequests.AdvisedGraphRequest;
@@ -16,13 +14,13 @@ import food.Food;
 public class NutritionRoutingService implements INutritionRoutingService {
 	
 	private IFoodService foodService;
-	private AdvisingService advisingService;
+	private AdvisingServiceTestforVisualization advisingService;
 	private IGraphService graphService;
 	
 	public NutritionRoutingService(IFoodService foodService, IGraphService graphService) {
 	    this.foodService = foodService;
 		this.graphService = graphService;
-	    this.advisingService = new AdvisingService();
+	    this.advisingService = new AdvisingServiceTestforVisualization();
 	}
 	
 	// for advised
@@ -32,7 +30,8 @@ public class NutritionRoutingService implements INutritionRoutingService {
 		Filter filter = request.getFilter();
 		request.setMealList(foodService.getMeals(filter));
 		
-		List<Food> swapMealList = advisingService.produceSwapMeals(filter);
+		// provides a meal list to advising
+		List<Food> swapMealList = advisingService.produceSwapMeals(request.getMealList());
 		request.setSwapMealList(swapMealList);
 		
 		return request.accept(graphService);		

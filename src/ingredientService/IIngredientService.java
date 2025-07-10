@@ -12,4 +12,9 @@ public interface IIngredientService {
 	public List<String> getIngredientNames(List<Integer> ingredientIDs);
 	//gets up to `maxResults` of the "best" matching ingredients when provided a nutrient list
 	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> nutrients, int maxResults);
+	//gets the given ingredient's food group ID, or -1 if no food group is associated
+	public int getFoodGroup(int ingredientID);
+	//gets the name of the provided food group ID
+	public String getFoodGroupName(int foodGroupID);
+	
 }

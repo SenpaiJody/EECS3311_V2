@@ -1,7 +1,11 @@
 package nutritionRequests;
 
-import Advising.NutritionGoal;
+import advisingTestForVisualization.NutritionGoal;
 import foodService.Filter;
+
+/*Nutrition Request service currently acts kind of like a factory in that it takes the input from the GUI
+ * and creates a request which is passed to nutritionRouting
+ */
 
 public interface INutritionRequestService {
 	
