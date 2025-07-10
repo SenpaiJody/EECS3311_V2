@@ -28,7 +28,7 @@ public class Profile {
 	
 	public void setGender(Gender g) {gender = g;}
 	public void setName(String n) {name = n;}
-	public void setDateOfBirth(LocalDate d) {dateOfBirth = d;}
+	public void setDateOfBirth(LocalDate date) {dateOfBirth = date;}
 	public void setHeight(double h) {height = h;}
 	public void setWeight(double w) {weight = w;}
 	
