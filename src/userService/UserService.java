@@ -49,6 +49,11 @@ class UserService implements IUserService{
 		if (db.doesUserExist(userID))
 			throw new UserAlreadyExistsException();
 		db.registerUser(userID, password);
+		try {
+			attemptLogin(userID,password);
+		} catch (IncorrectLoginException e) { //VERY unlikely exception, only if somehow the database didnt save the recently registered user (probably permissions)
+			throw new RuntimeException("Login incorrect for recently created user. This is likely an issue with the database.");
+		}
 	}
 	@Override
 	public int generateProfileID() {

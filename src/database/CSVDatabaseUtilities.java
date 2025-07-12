@@ -80,11 +80,24 @@ class CSVDatabaseUtilities {
 	
 	public static StringBuilder copyContent(String file, Predicate<String> predicate){
 		StringBuilder sb = new StringBuilder();		
-		readAndExecute(file, (String line)->{
-			sb.append(line);
-			sb.append('\n');
-			return true;
-		});
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		    String line;
+
+		    while ((line = br.readLine()) != null) {
+		        if (predicate.test(line)){
+					sb.append(line);
+					sb.append('\n');
+		        }
+		    }
+		    br.close();
+		}
+		catch(IOException e) {
+			throw new RuntimeException(file + " not found.");
+		}
+		
+		
+	
 		return sb;
 		
 	};
