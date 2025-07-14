@@ -96,7 +96,10 @@ public class ProfilePage extends GUI.GUIPanelBase {
 		
 		psp.getDeleteButtons().forEach(btn->{
 			btn.addActionListener(event ->{
-				if (event.getActionCommand().equals("delete")) {
+				if (event.getActionCommand().equals("delete")) {	
+					if (JOptionPane.showConfirmDialog(null, "Are you Sure?", "Confirm Deletion", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION)
+						return;
+					
 					userService.getCurrentUser().getProfiles().remove(btn.getProfile());
 					try {
 						userService.updateUser(userService.getCurrentUser());

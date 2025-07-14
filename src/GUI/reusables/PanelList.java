@@ -32,7 +32,7 @@ public class PanelList extends JPanel{
 		
 		container = new JPanel(); //container that will contain all of the list items, dynamically sizes to the size of the list items
 		//container.setBorder(BorderFactory.createLineBorder(Color.RED));
-		container.setLayout(new GridLayout(0,1)); //GridLayout with N rows and 1 column 
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS)); //GridLayout with N rows and 1 column 
 		panel.add(container, BorderLayout.PAGE_START);
 		
 		panel.setBackground(Color.LIGHT_GRAY);

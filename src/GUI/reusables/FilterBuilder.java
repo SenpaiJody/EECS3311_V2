@@ -17,6 +17,10 @@ import javax.swing.JToggleButton;
 
 import GUI.DateSpinner;
 import GUI.GBCUtility;
+import food.Breakfast;
+import food.Dinner;
+import food.Lunch;
+import food.Snack;
 import foodService.Filter;
 
 public class FilterBuilder extends JPanel {
@@ -34,10 +38,28 @@ public class FilterBuilder extends JPanel {
 	private PanelList excludePanelList;
 	
 	
-	public Filter getFilter() {
+	public Filter createFilter() {
 		Filter filter = new Filter();
-		return null;
+		filter.setDateRange(dateFrom.getDate(), dateTo.getDate());
+		if (select_Breakfast.isSelected())
+			filter.addToExcludedTypes(new Breakfast());
+		if (select_Lunch.isSelected())
+			filter.addToExcludedTypes(new Lunch());
+		if (select_Dinner.isSelected())
+			filter.addToExcludedTypes(new Dinner());
+		if (select_Snack.isSelected())
+			filter.addToExcludedTypes(new Snack());
+		for (PanelListItem item : includePanelList.getItems()) {
+			IngredientListItem casted = (IngredientListItem) item;
+			filter.addToIncludedIngredients(casted.getIngredientID());
+		}
+		for (PanelListItem item : excludePanelList.getItems()) {
+			IngredientListItem casted = (IngredientListItem) item;
+			filter.addToExcludedIngredients(casted.getIngredientID());
+		}
+		return filter;
 	}
+	
 	public FilterBuilder(){
 		
 		setLayout(new GridBagLayout());
@@ -137,4 +159,6 @@ public class FilterBuilder extends JPanel {
 		panel.add(label);
 		return panel;
 	}
+	
+
 }

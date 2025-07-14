@@ -34,14 +34,14 @@ public class MainWindow extends JFrame {
 		init();
 		
 		
-		try {
-			UserServiceFactory.getService().attemptLogin("jxia13", "mypassword");
-		} catch (IncorrectLoginException e) {
-			e.printStackTrace();
-		}
-		setPage(new ProfilePage());
+//		try {
+//			UserServiceFactory.getService().attemptLogin("jxia13", "mypassword");
+//		} catch (IncorrectLoginException e) {
+//			e.printStackTrace();
+//		}
+//		setPage(new ProfilePage());
 		
-		//setPage(new LoginPage());
+		setPage(new LoginPage());
 		
 		//setPage(new FilterBuilderPanel());
 	}

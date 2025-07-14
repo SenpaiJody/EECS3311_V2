@@ -74,6 +74,7 @@ class CSVDatabaseUtilities {
 				if ((c != ',' || inQuotes) && c !='"')
 					sb.append(c);
 			}
+			result.add(sb.toString());
 			String[] casted = new String[result.size()];
 			return result.toArray(casted);
 		}

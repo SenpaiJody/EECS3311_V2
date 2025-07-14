@@ -47,7 +47,7 @@ public class CreateMealPage extends BasicPage {
 	
 	public CreateMealPage(){
 		setSubtitle("Record a New Meal");
-		getNavBar().getHistoryButton().setEnabled(false);
+//		getNavBar().getHistoryButton().setEnabled(false);
 		getInnerPanel().setLayout(new GridLayout());
 		
 		
