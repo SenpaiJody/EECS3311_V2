@@ -1,4 +1,4 @@
-package Advising;
+package recommendation;
 
 import java.util.List;
 
@@ -18,5 +18,10 @@ public interface INutritionGoalManager{
     public NutritionGoal findGoal(Integer profileId, int goalId);
     
 //    void validateInputs(int nutrientId, int intensity, Integer ingredientId);
+    
+    // ADDED: Observer pattern methods
+    void addGoalChangeListener(GoalChangeListener listener);
+    void removeGoalChangeListener(GoalChangeListener listener);
+    void notifyGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals);
 	
 }
