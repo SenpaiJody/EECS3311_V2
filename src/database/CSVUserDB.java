@@ -12,6 +12,7 @@ import userService.IUserDB;
 import userService.Profile;
 import userService.User;
 import userService.Profile.Gender;
+import userService.Profile.Unit;
 
 public class CSVUserDB implements IUserDB{
 	private final String user_pwd_csv = "data/csv/user_pwd.csv";
@@ -19,32 +20,40 @@ public class CSVUserDB implements IUserDB{
 	private final String profile_data_csv = "data/csv/profile_data.csv";
 	private final String unique_profileID_csv = "data/csv/unique_profileID.csv";
 	
-	private final Profile.Gender[] gender_lookup = {Gender.MALE,Gender.FEMALE,Gender.OTHER,Gender.UNSPECIFIED};
-
+	private final Profile.Gender[] gender_lookup = {Gender.MALE,Gender.FEMALE};
+	private final Profile.Unit[] unit_lookup = {Unit.METRIC, Unit.IMPERIAL};
+	
 	private String formatProfile(Profile p) {
-		return String.format("%d,%d,%s,%s,%.2f,%.2f", 
+		return String.format("%d,%d,%s,%s,%.2f,%.2f,%d", 
 				p.getID(), 
 				p.getGender().ordinal(), 
 				p.getName(),
 				String.format("%d-%d-%d", p.getDateOfBirth().getYear(),p.getDateOfBirth().getMonthValue(), p.getDateOfBirth().getDayOfMonth()),
 				p.getHeight(),
-				p.getWeight()
+				p.getWeight(),
+				p.getPreferredUnit() == Unit.METRIC ? 0 : 1
 				);
 	}
 	
 	private void updateProfiles(List<Profile> profiles) {
+		List<Profile> temp = new ArrayList<Profile>(profiles.size());
+		
+		for (int i =0 ; i <profiles.size(); i++) {
+			temp.add(profiles.get(i));
+		}
+		
 		StringBuilder sb = new StringBuilder();		
 		
-		for (Profile p : profiles) {
+		for (Profile p : temp) {
 			sb.append(formatProfile(p) + "\n");
 		}
 		
 		CSVDatabaseUtilities.readAndExecute(profile_data_csv, (String line)->{
 			boolean foundMatch = false;
-			for (int i = 0; i < profiles.size(); i++) {
-				if (line.split(",")[0].equals(String.format("%d",profiles.get(i).getID()))) {
+			for (int i = 0; i < temp.size(); i++) {
+				if (line.split(",")[0].equals(String.format("%d",temp.get(i).getID()))) {
 					foundMatch = true;
-					profiles.remove(i);
+					temp.remove(i);
 					break;
 				}
 			}
@@ -54,6 +63,8 @@ public class CSVUserDB implements IUserDB{
 			}
 			return true;
 		});
+		
+
 		
 		
 
@@ -88,11 +99,11 @@ public class CSVUserDB implements IUserDB{
 					String name = elements[2];
 					double height = Double.parseDouble(elements[4]);
 					double weight = Double.parseDouble(elements[5]);
-					
+					Profile.Unit unit = unit_lookup[Integer.parseInt(elements[6])];
 					
 					LocalDate dateOfBirth = LocalDate.of(Integer.parseInt(dateString[0]), Integer.parseInt(dateString[1]), Integer.parseInt(dateString[2]));
 					
- 					profiles.add(new Profile(profileID, name, gender ,dateOfBirth,height,weight));
+ 					profiles.add(new Profile(profileID, name, gender ,dateOfBirth,height,weight, unit));
  					
  					ids.remove(i);
 					break;
@@ -146,17 +157,16 @@ public class CSVUserDB implements IUserDB{
 		updateProfiles(u.getProfiles());
 		StringBuilder sb = CSVDatabaseUtilities.copyContent(user_profile_csv, (String line)->{
 			String[] elements = line.split(",");
-			return elements[0] != u.getUserID();
+			return !elements[0].equals(u.getUserID());
 		});
 		for (Profile p : u.getProfiles()) {
-			sb.append(String.format("%s,%d",u.getUserID(),p.getID()));
+			sb.append(String.format("%s,%d\n",u.getUserID(),p.getID()));
 		}
 		
 		PrintWriter pw = CSVDatabaseUtilities.createPrintWriter(user_profile_csv);
 		pw.print(sb.toString());
 		pw.close();
 		
-		//TODO: update user settings too;.
 	}
 	@Override
 	public void registerUser(String userID, String password) {	

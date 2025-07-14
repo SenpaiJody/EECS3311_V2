@@ -25,17 +25,23 @@ public class CSVFoodDB implements IFoodDB {
 
 
 	private List<Food> getFood(int profileID, Filter filter, boolean isSnack){		
-		List<String> profileIDs = new ArrayList<String>();
+		List<String> foodIDs = new ArrayList<String>();
 		CSVDatabaseUtilities.readAndExecute(profile_food_csv, (String line)->{
 			String[] elements = line.split(",");
 			if (elements[0].equals(String.format("%d", profileID)))
-				profileIDs.add(elements[1]);
+				foodIDs.add(elements[1]);
 			return true;
 		});
 		
 		List<Food> foods = new ArrayList<Food>();
 		CSVDatabaseUtilities.readAndExecute(food_data_csv, (String line)->{
-			String[] elements = line.split(",");
+			String[] elements = CSVDatabaseUtilities.smartSplit(line);
+			
+			if (!foodIDs.contains(elements[0])) {
+				return true;
+			}
+			foodIDs.remove((Object) Integer.parseInt(elements[0]));
+			
 			FoodBuilder fb = new FoodBuilder();
 			fb.setID(Integer.parseInt(elements[0]));
 			fb.setName(elements[1]);
@@ -66,7 +72,9 @@ public class CSVFoodDB implements IFoodDB {
 				good = false;
 			if (good && (filter == null || filter.test(f)))
 				foods.add(f);
-			return true;
+			
+			
+			return (foodIDs.size() > 0);
 		});
 
 		

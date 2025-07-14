@@ -5,6 +5,6 @@ user_profiles
 	userID,profileID
 
 profile_data
-	userID,genderID,name,DoB(yyyy--mm-dd),height, weight
+	userID,genderID,name,DoB(yyyy--mm-dd),height,weight,unit(0-Metric,1-Imperial)
 
 unique_profileID
