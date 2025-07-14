@@ -1,21 +1,47 @@
-package Advising;
+package recommendation;
 
 import java.util.*;
 
 public class NutritionGoalManager implements INutritionGoalManager {
 	private List<NutritionGoal> activeGoals;
     private final int maxGoalsPerUser = 2;
+    private List<GoalChangeListener> listeners;
 
+    
+    
     public NutritionGoalManager() {
         this.activeGoals = new ArrayList<>();
+        this.listeners = new ArrayList<>();
     }
-
+    
+    @Override
+    public void addGoalChangeListener(GoalChangeListener listener) {
+        listeners.add(listener);
+        System.out.println("[INFO] Goal change listener added: " + listener.getClass().getSimpleName());
+    }
+    
+    @Override
+    public void removeGoalChangeListener(GoalChangeListener listener) {
+        listeners.remove(listener);
+        System.out.println("[INFO] Goal change listener removed: " + listener.getClass().getSimpleName());
+    }
+    
+    @Override
+    public void notifyGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals) {
+        System.out.println("[INFO] Notifying " + listeners.size() + " listeners of goal change for profile " + profileId);
+        for (GoalChangeListener listener : listeners) {
+            try {
+                listener.onGoalChanged(profileId, updatedGoals);
+            } catch (Exception e) {
+                System.err.println("[ERROR] Error notifying listener: " + e.getMessage());
+            }
+        }
+    }
     
     @Override
     public NutritionGoal createGoal(Integer profileId, Integer nutrientId, int intensity, 
                                    GoalType goalType, Integer ingredientId) {
-        // Validate inputs first
-//        validateInputs(nutrientId, intensity, ingredientId);
+
 
         NutritionGoal newGoal = new NutritionGoal(profileId, nutrientId, intensity, 
                                                   goalType, ingredientId);
@@ -29,6 +55,8 @@ public class NutritionGoalManager implements INutritionGoalManager {
         }
 
         activeGoals.add(goal);
+     // ADDED: Notify observers
+        notifyGoalChanged(profileId, getActiveGoals(profileId));
         return true;
     }
 
@@ -39,6 +67,13 @@ public class NutritionGoalManager implements INutritionGoalManager {
             goal.getprofileId().equals(profileId)
 //            && goal.getgoalId().equals(goalId)
         );
+        
+        boolean removed = activeGoals.size() < initialSize;
+        if (removed) {
+            System.out.println("[INFO] Removed goal " + goalId + " from profile " + profileId);
+            // ADDED: Notify observers
+            notifyGoalChanged(profileId, getActiveGoals(profileId));
+        }
         return activeGoals.size() < initialSize;
     }
 
@@ -97,6 +132,7 @@ public class NutritionGoalManager implements INutritionGoalManager {
         goalToUpdate.setGoalType(newGoalType);
         goalToUpdate.setIngredientId(newIngredientId);
         
+        notifyGoalChanged(profileId, getActiveGoals(profileId));
         return true;
     }
 
@@ -110,4 +146,6 @@ public class NutritionGoalManager implements INutritionGoalManager {
         }
         return null; // Goal not found
     }
+
+
 }

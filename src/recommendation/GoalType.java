@@ -1,4 +1,4 @@
-package Advising;
+package recommendation;
 
 public enum GoalType {
     INCREASE,

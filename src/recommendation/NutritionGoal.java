@@ -1,4 +1,4 @@
-package Advising;
+package recommendation;
 
 import java.util.List;
 
