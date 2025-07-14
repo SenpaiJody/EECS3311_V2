@@ -3,6 +3,7 @@ package GUI;
 
 import javax.swing.*;
 
+import GUI.filter.FilterBuilderPanel;
 import GUI.login.LoginPage;
 import GUI.profile.ProfilePage;
 import userService.IncorrectLoginException;
@@ -41,6 +42,8 @@ public class MainWindow extends JFrame {
 		setPage(new ProfilePage());
 		
 		//setPage(new LoginPage());
+		
+		//setPage(new FilterBuilderPanel());
 	}
 	
 	private void init() {

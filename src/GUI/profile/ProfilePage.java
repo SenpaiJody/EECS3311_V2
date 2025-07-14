@@ -11,7 +11,8 @@ import javax.swing.*;
 
 import GUI.GBCUtility;
 import GUI.MainWindow;
-import GUI.homepage.HomePage;
+import GUI.contentPages.BasicPage;
+import GUI.contentPages.homepage.HomePage;
 import userService.IUserService;
 import userService.Profile;
 import userService.ProfileDoesNotExistException;

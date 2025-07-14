@@ -23,7 +23,7 @@ public class DateSpinner extends JPanel implements ItemListener{
 
 	public void setDate(LocalDate d) {
 		yearComboBox.setSelectedItem(d.getYear());
-		monthComboBox.setSelectedItem(d.getMonth());
+		monthComboBox.setSelectedIndex(d.getMonth().getValue()-1);
 		dayComboBox.setSelectedItem(d.getDayOfMonth());
 	}
 	
@@ -39,18 +39,23 @@ public class DateSpinner extends JPanel implements ItemListener{
 		monthLabel.setFont(font);;
 		dayLabel.setFont(font);
 		
-
+		
+		Font comboFont = font.deriveFont(Font.BOLD);
+		
 		yearComboBox = new JComboBox<Integer>();
+		yearComboBox.setFont(comboFont);
 		for (int i = 0; i < 100; i++)
 			yearComboBox.addItem(LocalDate.now().getYear()-i);
 		yearComboBox.addItemListener(this);
 		
 		monthComboBox = new JComboBox<String>();
+		monthComboBox.setFont(comboFont);
 		for (int i =0; i < MONTHS.length; i++)
 			monthComboBox.addItem(MONTHS[i]);
 		monthComboBox.addItemListener(this);
 		
 		dayComboBox = new JComboBox<Integer>();
+		dayComboBox.setFont(comboFont);
 		dayComboBox.removeAllItems();
 		for (int i =1; i <= 31; i++)
 			dayComboBox.addItem(i);
@@ -93,9 +98,21 @@ public class DateSpinner extends JPanel implements ItemListener{
         		
                 revalidate();
                 repaint();
-
         	}
  
         }
 	};
+	
+	public void addItemListener(ItemListener listener) {
+		yearComboBox.addItemListener(listener);
+		monthComboBox.addItemListener(listener);
+		dayComboBox.addItemListener(listener);
+		
+	}	
+	public void removeItemListener(ItemListener listener) {
+		yearComboBox.removeItemListener(listener);
+		monthComboBox.removeItemListener(listener);
+		dayComboBox.removeItemListener(listener);
+	}
+	
 }
