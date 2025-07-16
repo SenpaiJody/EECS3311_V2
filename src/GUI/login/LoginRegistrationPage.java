@@ -7,7 +7,8 @@ import GUI.GUIPanelBase;
 
 import javax.swing.*;
 
-public class LoginPage extends GUIPanelBase {
+//The main login page
+public class LoginRegistrationPage extends GUIPanelBase {
 	
 	private GUIPanelBase currentPanel;
 	

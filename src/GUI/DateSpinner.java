@@ -11,7 +11,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
+/**
+ * A "Spinner" for dates (actually uses JComboBoxes)
+ * */
 public class DateSpinner extends JPanel implements ItemListener{
 	
 	private JComboBox<Integer> yearComboBox;

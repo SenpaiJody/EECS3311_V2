@@ -11,13 +11,14 @@ import java.util.Map;
 import nutrientService.INutrientService;
 
 
-
+/** An implementation of INutrientService that uses a CSV database.
+ * */
 public class CSVNutrientDB implements INutrientService {
 	
 	private final String nutrient_name_csv = "data/csv/NUTRIENT_NAME.csv";
 	private final String nutrient_amount_csv = "data/csv/NUTRIENT_AMOUNT.csv";
 	
-	
+
 	@Override
 	public Map<Integer,Map<Integer, Double>> getNutrientsListPer100g(List<Integer> ingredientIDs) {
 		

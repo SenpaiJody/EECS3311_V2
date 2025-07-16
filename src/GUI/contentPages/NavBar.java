@@ -16,6 +16,7 @@ import GUI.contentPages.meal.CreateMealPage;
 import GUI.contentPages.meal.MealHistoryPage;
 import GUI.profile.ProfilePage;
 
+//The navigation bar that exists on any page of the GUI
 public class NavBar extends JPanel {
 	
 	private JButton homeBtn;

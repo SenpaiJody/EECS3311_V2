@@ -19,6 +19,8 @@ import GUI.GBCUtility;
 import ingredientService.IIngredientService;
 import ingredientService.IngredientServiceFactory;
 
+
+//A PanelListItem that represents an ingredient
 public class IngredientListItem extends PanelListItem{
 
 	private int ingredientID;

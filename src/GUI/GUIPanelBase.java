@@ -8,10 +8,12 @@ import java.awt.GridBagLayout;
 
 import javax.swing.*;
 
-//base class for a GUI component; uses GridBagLayout
-/*Implements the Template Pattern
+//
+/** base class for a GUI component; uses GridBagLayout
+ * Implements the Template Pattern
+ * Unfortunately, this has proven to not integrate well into the workflow of Swing and will not be used in further UI classes
+ * TODO: remove this class and refactor its children to not inherit from it.
  * */
- 
 public abstract class GUIPanelBase extends JPanel {
 	
 

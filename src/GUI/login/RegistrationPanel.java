@@ -23,13 +23,14 @@ import userService.User;
 import userService.UserAlreadyExistsException;
 import userService.UserServiceFactory;
 
+//The registration part of the loginpage
 class RegistrationPanel extends GUIPanelBase implements ActionListener{
 	
 	JTextField usernameField;
 	JPasswordField passwordField;
-	LoginPage parentPage;
+	LoginRegistrationPage parentPage;
 
-	RegistrationPanel(LoginPage parentPage){
+	RegistrationPanel(LoginRegistrationPage parentPage){
 		this.parentPage = parentPage;
 	}
 

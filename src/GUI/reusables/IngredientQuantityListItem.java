@@ -9,6 +9,7 @@ import javax.swing.SpinnerNumberModel;
 
 import GUI.GBCUtility;
 
+//A PanelListItem that represents an ingredient and its quantity
 public class IngredientQuantityListItem extends IngredientListItem {
 
 	private double quantity;

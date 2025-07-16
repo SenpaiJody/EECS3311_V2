@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import GUI.GBCUtility;
 import userService.Profile;
 
+//a class that populates a panel with clickable panels
 public class ProfilePanelPopulator {
 	
 	private static final int MAX_ROWS = 2;

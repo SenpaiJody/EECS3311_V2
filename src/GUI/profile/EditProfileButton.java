@@ -4,6 +4,7 @@ import javax.swing.JButton;
 
 import userService.Profile;
 
+//A button with the edit actioncommand
 public class EditProfileButton extends JButton {
 	private Profile p;
 	public Profile getProfile() {return p;}

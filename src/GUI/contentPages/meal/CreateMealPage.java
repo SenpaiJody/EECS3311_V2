@@ -38,10 +38,17 @@ import food.Food;
 import food.FoodBuilder;
 import food.FoodType;
 import food.IncompleteFoodException;
+import food.Snack;
 import foodService.FoodServiceFactory;
 import foodService.IFoodService;
 import foodService.InvalidFoodTypeException;
+import nutriCalc.INutriCalc;
+import nutriCalc.NutrientProfile;
+import nutriCalc.NutritionFacade;
+import nutrientService.INutrientService;
+import nutrientService.NutrientServiceFactory;
 
+//The page for creating meals
 public class CreateMealPage extends BasicPage {
 
 	
@@ -183,13 +190,22 @@ public class CreateMealPage extends BasicPage {
 		return nutrientsPanel;
 	}
 	
-	private void updateNutrientTextDisplay(JPanel nutrientTextInfo, Map<Integer,Double> data) {
-//		JPanel dataPair = new JPanel();
-//		
-//		JLabel key = new JLabel();
-//		JLabel value = new JLabel();
+	private void updateNutrientTextDisplay(JPanel nutrientTextInfo, Map<Integer,Double> data) {		
+		INutriCalc nutritionCalculator = new NutritionFacade();
+		NutrientProfile nutrients = nutritionCalculator.calculateNutritionProfiles(data);
+		
+		INutrientService nutrientService = NutrientServiceFactory.getService();
+		
+		
 		nutrientTextInfo.removeAll();
-		nutrientTextInfo.add(new JLabel("Text Nutrient Data"));
+		nutrients.getAllNutrients().forEach((id, amt)->{
+			String nutrientName = nutrientService.getNutrientName(id);
+			String nutrientUnit = nutrientService.getNutrientUnit(id);
+			
+			nutrientTextInfo.add(new JLabel(String.format("%s : %.2f %s", nutrientName, amt, nutrientUnit)));
+		});
+		
+		
 		nutrientTextInfo.revalidate();
 		nutrientTextInfo.repaint();
 	}
@@ -315,5 +331,23 @@ public class CreateMealPage extends BasicPage {
 		
 	}
 	
+	//creates a "dummy" food object without fully completed data, just for nutrient calculation
+//	private Food createDummyFood(Map<Integer, Double> ingredients) {
+//		FoodBuilder foodBuilder = new FoodBuilder();
+//		foodBuilder.setName("Dummy");
+//		foodBuilder.setDate(LocalDate.now());
+//		foodBuilder.setID(0);
+//		foodBuilder.setFoodType(new Snack());
+//		ingredients.forEach((id, amt) -> {
+//
+//			foodBuilder.addIngredient(id, amt);
+//		});
+//		try {
+//			return foodBuilder.getResult();
+//		} catch (IncompleteFoodException e) {
+//			return null;
+//		}
+//	}
+		
 
 }

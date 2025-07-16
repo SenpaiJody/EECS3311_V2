@@ -10,20 +10,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+//TODO: consider moving this to a library for Deliverable 3.
+/**A "Utility" class providing frequently used functions
+ * */
 class CSVDatabaseUtilities {
-	public static PrintWriter createPrintWriter(String filename) {
+	
+	/**Creates a new PrintWriter object that operates on the given filename
+	 * @param filename that the PrintWriter will be created with
+	 * @return the created PrintWriter object
+	 * @throws RuntimeException if the file does not exist.
+	 * */
+	static PrintWriter createPrintWriter(String filename) {
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new File(filename));
 		}
 		catch(FileNotFoundException e) {
-			System.out.println(filename + " not found");
+			throw new RuntimeException(filename + " not found");
 		}
 		return pw;
 	}
 	
-	//funcOnLine is a function executed for each line of CSV, if this function returns false, the execution will end there.
-	public static void readAndExecute(String file, Predicate<String> funcOnLine) {
+	
+	/** A function that reads every line of the provided file and executes the predicate function on that line
+	 * <p> If the predicate returns True, then the next line in the CSV will be read.
+	 * <br>If the predicate returns False, then no more lines in the CSV will be read.
+	 * 
+	 * @param file - the file to read
+	 * @param funcOnLine - the predicate with the function to execute each line
+	 * */
+	static void readAndExecute(String file, Predicate<String> funcOnLine) {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    String line;
 		    boolean cont = true;
@@ -37,8 +53,13 @@ class CSVDatabaseUtilities {
 		}
 	}
 	
-	//splits a line, taking into account the quotations ("") that cause a regular .split(",") to not work. Not yet rigorously tested.
-	public static String[] smartSplit(String s) {
+	
+	
+	/**An alternative to String.split(",") that smartly handles non-delimiting commas (commas within "") 
+	 * @param String - string to split
+	 * @return The string split by delimiting commas
+	 * */
+	static String[] smartSplit(String s) {
 			List<String> result = new ArrayList<String>();
 			StringBuilder sb = new StringBuilder();
 			boolean inQuotes = false;
@@ -79,7 +100,13 @@ class CSVDatabaseUtilities {
 			return result.toArray(casted);
 		}
 	
-	public static StringBuilder copyContent(String file, Predicate<String> predicate){
+	/** Returns a StringBuilder that contains each line of the provided file, iff that line passes the provided predicate
+	 * @param file - the file to copy
+	 * @param predicate - the predicate to test each line on
+	 * 
+	 * @returns a StringBuilder that contains each line of the provided file iff that line passes the provided predicate
+	 * */
+	static StringBuilder copyContent(String file, Predicate<String> predicate){
 		StringBuilder sb = new StringBuilder();		
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {

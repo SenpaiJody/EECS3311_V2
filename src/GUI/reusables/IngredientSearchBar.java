@@ -35,6 +35,7 @@ public class IngredientSearchBar extends GUIPanelBase{
 		attachListenerToSearchBar();
 	}
 	
+	//attaches listeners to a the search bar object
 	private void attachListenerToSearchBar() {
 		searchBar.addActionListener(event->{
 				if (event.getActionCommand().equals("comboBoxEdited")) {
@@ -62,6 +63,7 @@ public class IngredientSearchBar extends GUIPanelBase{
 		});
 	}
 	
+	//gets relevant ingredient names based on an input string
 	private List<String> getSearchOptions(String input){
 		if (input == null || input.length() == 0)
 			return new ArrayList<String>();

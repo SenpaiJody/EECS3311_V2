@@ -23,6 +23,9 @@ import food.Lunch;
 import food.Snack;
 import foodService.Filter;
 
+
+/** A reusable panel that allows the user to input things that describe a filter and get the Filter object it describes.
+ * */
 public class FilterBuilder extends JPanel {
 
 	private DateSpinner dateFrom;

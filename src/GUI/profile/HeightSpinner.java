@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 
 import GUI.UnitConverter;
 
+//A Spinner that displays height and can switch between imperial and metric
 public class HeightSpinner extends JPanel implements ChangeListener{
 
 	double height = 170;

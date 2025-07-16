@@ -33,6 +33,7 @@ import foodService.Filter;
 import foodService.FoodServiceFactory;
 import foodService.IFoodService;
 
+//The apge for listing meal history
 public class MealHistoryPage extends BasicPage{
 
 	MealListItem currentlyExpandedItem;
@@ -134,7 +135,6 @@ public class MealHistoryPage extends BasicPage{
 				});
 				mealList.addItem(item);
 			}
-			
 			
 		});
 	}
