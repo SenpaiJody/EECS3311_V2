@@ -1,5 +1,9 @@
 package GUI;
 
+
+/** A utility class for converting between metric and imperial units
+ * 
+ * */
 public class UnitConverter {
 	
 	public static int[] cmToFeetInches(double cm) {

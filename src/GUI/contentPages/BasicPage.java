@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import GUI.GBCUtility;
 
+//base class for whole pages in the GUI
 public abstract class BasicPage extends JPanel {
 
 	private NavBar navBar;

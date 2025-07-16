@@ -1,6 +1,9 @@
 package userService;
 
-//represents a concrete implementation of IUserService implementing the common logic that has to do with the Users and Profiles
+/** an Implementation of {@link IUserService} that uses an {@link IUserDB} to store data. This class essentially provides logic to the underlying IUserDB object while implementing the {@link IUserService} interface.
+ * <P> this allows the IUserDB to focus on CRUD operations while still being able to fulfil the IUserService interface
+ * 
+ * */
 class UserService implements IUserService{
 	
 	//"contract" to a user database
@@ -44,6 +47,7 @@ class UserService implements IUserService{
 		db.updateUser(u);
 	}
 
+	//registers a user then logs in as that user
 	@Override
 	public void registerUser(String userID, String password) throws UserAlreadyExistsException {
 		if (db.doesUserExist(userID))

@@ -19,6 +19,7 @@ import userService.ProfileDoesNotExistException;
 import userService.UserDoesNotExistException;
 import userService.UserServiceFactory;
 
+//The Profile Selection and Editing page
 public class ProfilePage extends GUI.GUIPanelBase {
 	
 	JLabel pageTitle;

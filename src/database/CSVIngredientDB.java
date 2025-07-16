@@ -15,6 +15,7 @@ public class CSVIngredientDB implements IIngredientDB{
 	private final String food_name_csv = "data/csv/FOOD_NAME.csv";
 	private final String food_group_csv = "data/csv/FOOD_GROUP.csv";
 	
+	//implementation that returns a CSVIngredientIterator containing all of the ingredients
 	public IIngredientIterator getIterator() {
 		CSVIngredientIterator iterator = new CSVIngredientIterator();
 		CSVDatabaseUtilities.readAndExecute(food_name_csv, (String line)->{

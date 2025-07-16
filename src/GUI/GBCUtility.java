@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.GridBagConstraints;
 
+//A utility class for creating GridBagConstraints
 public class GBCUtility {
 	public static GridBagConstraints createGBC(int gridx, int gridy) {
 		GridBagConstraints gbc = new GridBagConstraints();

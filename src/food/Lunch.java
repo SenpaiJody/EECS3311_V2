@@ -1,5 +1,7 @@
 package food;
 
+
+/**a foodtype representing a lunch*/
 public class Lunch extends Meal{
 
 

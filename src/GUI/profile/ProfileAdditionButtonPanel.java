@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import userService.Profile;
 
+//A clickable panel that has a "+" on it. Exists on the profile page
 public class ProfileAdditionButtonPanel extends ProfileButtonPanel{
 	Profile profile;
 	

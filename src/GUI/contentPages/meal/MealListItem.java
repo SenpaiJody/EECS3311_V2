@@ -1,29 +1,26 @@
 package GUI.contentPages.meal;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import GUI.GBCUtility;
+import GUI.MainWindow;
+import GUI.contentPages.advising.AdvisingPage;
 import GUI.reusables.IngredientQuantityListItem;
 import GUI.reusables.PanelList;
 import GUI.reusables.PanelListItem;
 import food.Food;
-import foodService.FoodServiceFactory;
-import foodService.IFoodService;
-import userService.UserServiceFactory;
 
+
+//A PanelListItem that displays a Meal/Food
 public class MealListItem extends PanelListItem implements MouseListener{
 
 	boolean expanded = false;
@@ -98,9 +95,13 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		add(detailsPanel,detailsPanelGBC);
 		
 		
-		
 		food.getIngredients().forEach((id, amt)->{
 			ingredientsList.addItem(new IngredientQuantityListItem(ingredientsList, id, false, amt, false));
+		});
+		
+		
+		replaceButton.addActionListener(event->{
+			MainWindow.getInstance().setPage(new AdvisingPage(food));
 		});
 	}
 	

@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 
 import GUI.GUIPanelBase;
 
+//A clickable panel that exists in the ProfilePage
 public class ProfileButtonPanel extends GUIPanelBase implements MouseListener{
 
 	ProfileButtonPanel(){

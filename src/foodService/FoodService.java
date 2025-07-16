@@ -7,28 +7,41 @@ import java.util.List;
 import food.*;
 import userService.UserServiceFactory;
 
-class FoodService implements IFoodService{
+/**An implementation of the IFoodService interface that uses an IFoodDB object to provide services.
+ * 
+ * */
+public class FoodService implements IFoodService{
 	
 	IFoodDB db;
 	FoodService(IFoodDB implementation){
 		this.db = implementation;
 	}
 	
+	/**{@inheritDoc} Only returns meals that belong to the current selected profile
+	 * */
 	@Override
 	public List<Food> getMeals(Filter filter) {
 		return db.getMeals(UserServiceFactory.getService().getCurrentProfile().getID(), filter);
 	}
 
+	/**{@inheritDoc} Only returns snacks that belong to the current selected profile
+	 * */
 	@Override
 	public List<Food> getSnacks(Filter filter) {
 		return db.getSnacks(UserServiceFactory.getService().getCurrentProfile().getID(), filter);
 	}
 	
+	/**{@inheritDoc} Saves to the Current Selected profile.
+	 * */
 	@Override
-	public void saveSnack(Food food) {
+	public void saveSnack(Food food) throws InvalidFoodTypeException {
+		if (!(food.getType() instanceof Snack))
+			throw new InvalidFoodTypeException();
 		db.saveSnack(UserServiceFactory.getService().getCurrentProfile().getID(), food);
 	}
 
+	/**{@inheritDoc} Saves to the Current Selected profile.
+	 * */
 	@Override
 	public void saveMeal(Food food) throws InvalidFoodTypeException {
 		List<FoodType> validTypes = getValidFoodTypes(food.getDate());
@@ -39,23 +52,21 @@ class FoodService implements IFoodService{
 				break;
 			}
 		}
-		if (!found) {
+		if (!found || !(food.getType() instanceof Meal)) {
 			throw new InvalidFoodTypeException();
 		}
 		
 		db.saveMeal(UserServiceFactory.getService().getCurrentProfile().getID(), food);
 	}
+	
+	/**{@inheritDoc}*/
 	@Override
 	public int generateFoodID() {
 		return db.generateFoodID();
 	}
 
+	/**{@inheritDoc}*/
 	@Override
-	/**
-	 * searches the database and returns the foodTypes that can be saved to that date; 
-	 * (if a breakfast exists on that day, the returned value will not include the Breakfast FoodType)
-	 * Since Snacks are always allowed, the Snack FoodType will always be included in the result*
-	 * */	
 	public List<FoodType> getValidFoodTypes(LocalDate date) {
 		Filter f = new Filter();
 		f.setDateRange(date, date);

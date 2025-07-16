@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 import GUI.contentPages.BasicPage;
 
+//The home page / landing page 
 public class HomePage extends BasicPage {
 	
 	public HomePage(){

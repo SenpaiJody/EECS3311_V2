@@ -24,14 +24,14 @@ import userService.UserAlreadyExistsException;
 import userService.UserServiceFactory;
 
 
-
+//the "login" part of the login page
 class LoginPanel extends GUIPanelBase implements ActionListener{		
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	
-	private LoginPage parentPage;
+	private LoginRegistrationPage parentPage;
 
-	LoginPanel(LoginPage parentPage){
+	LoginPanel(LoginRegistrationPage parentPage){
 		this.parentPage = parentPage;
 	}
 	

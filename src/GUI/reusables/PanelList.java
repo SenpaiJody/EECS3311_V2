@@ -12,7 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-//A class that lists other panels
+/** A reusable list that contains {@link PanelListItem} panels and allows scrolling
+ * */
 public class PanelList extends JPanel{
 	private JPanel container; //list item container;
 	
@@ -40,6 +41,7 @@ public class PanelList extends JPanel{
 		
 	}
 	
+	//add a PanelListItem
 	public void addItem(PanelListItem item) {
 		if(items.contains(item))
 			return;
@@ -52,6 +54,8 @@ public class PanelList extends JPanel{
 		revalidate();
 		repaint();
 	}
+	
+	//remove a PanelListItem
 	public void removeItem(PanelListItem item) {
 		container.remove(item);
 		items.remove(item);
@@ -60,6 +64,7 @@ public class PanelList extends JPanel{
 		revalidate();
 		repaint();
 	}
+	//removes ALL PanelListItems
 	public void removeAllItems() {
 		container.removeAll();
 		items.clear();
@@ -69,6 +74,7 @@ public class PanelList extends JPanel{
 		repaint();
 	}
 	
+	//returns true if the list contains the item, false otherwise
 	public boolean contains(PanelListItem item) {
 		return (items.contains(item));
 	}

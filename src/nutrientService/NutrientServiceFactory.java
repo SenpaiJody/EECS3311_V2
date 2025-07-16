@@ -2,6 +2,8 @@ package nutrientService;
 
 import database.CSVNutrientDB;
 
+/**A flyweight factory for creating and storing INutrientService objects
+ * */
 public class NutrientServiceFactory {
 	private static INutrientService service;
 	

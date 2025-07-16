@@ -25,6 +25,7 @@ import userService.Profile;
 import userService.Profile.Gender;
 import userService.Profile.Unit;
 
+//The pane that displays profile data that can be edited.
 public class ProfileDetailsPanel extends GUIPanelBase implements ItemListener{
 
 	private JButton doneButton;
