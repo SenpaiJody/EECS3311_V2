@@ -4,5 +4,6 @@
 .project
 .idea
 
-
+.metadata/
+.settings/
 
