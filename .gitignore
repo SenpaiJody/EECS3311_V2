@@ -1,9 +1,8 @@
 /bin/
+/.metadata/
+/.settings/
 .DS_Store
 .classpath
 .project
-.idea
-
-.metadata/
-.settings/
+.idea/
 
