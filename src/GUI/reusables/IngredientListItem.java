@@ -50,6 +50,7 @@ public class IngredientListItem extends PanelListItem{
 	private void addInformationContainer(int ingredientID) {
 		informationContainer = new JPanel();
 		informationContainer.setLayout(new GridBagLayout());
+		informationContainer.setOpaque(false);
 
 		IIngredientService ingredientService = IngredientServiceFactory.getService();
 		String ingName = ingredientService.getIngredientName(ingredientID);

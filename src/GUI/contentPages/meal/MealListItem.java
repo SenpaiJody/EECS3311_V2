@@ -27,7 +27,18 @@ public class MealListItem extends PanelListItem implements MouseListener{
 	
 	JPanel detailsPanel;
 	JLabel expansionLabel;
+	Food food;
+	
+	public Food getFood() {return food;}
+	public JPanel getDetailsPanel() {
+		if (detailsPanel == null)
+			generateDetailsPanel();
+		return detailsPanel;
+	}
+	
 	public MealListItem(Food food) {
+		
+		this.food = food;
 		addMouseListener(this);
 		
 		
@@ -52,6 +63,24 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		add(expansionLabel, GBCUtility.createGBC(3,0,1,2));
 		
 		
+
+	}
+	
+	public boolean getExpanded() {return expanded;}
+	public void setExpanded(boolean expanded) {
+		if (this.expanded == expanded) 
+			return;
+		
+		if (expanded == true && detailsPanel == null) {
+			generateDetailsPanel();
+		}
+		detailsPanel.setVisible(expanded);
+		expansionLabel.setText(!expanded ? "[Click to Expand]  " : "[Click to Retract]  ");
+		this.expanded = expanded;
+	}
+
+	
+	private void generateDetailsPanel() {
 		detailsPanel = new JPanel();
 		detailsPanel.setOpaque(false);
 		detailsPanel.setVisible(false);
@@ -104,15 +133,6 @@ public class MealListItem extends PanelListItem implements MouseListener{
 			MainWindow.getInstance().setPage(new AdvisingPage(food));
 		});
 	}
-	
-	public boolean getExpanded() {return expanded;}
-	public void setExpanded(boolean expanded) {
-		detailsPanel.setVisible(expanded);
-		expansionLabel.setText(!expanded ? "[Click to Expand]  " : "[Click to Retract]  ");
-		this.expanded = expanded;
-	}
-
-	
 	
 	
 	@Override
