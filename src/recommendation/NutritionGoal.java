@@ -54,6 +54,18 @@ public class NutritionGoal{
     public void setIngredientId(Integer ingredientId) { 
     	this.ingredientId = ingredientId; 
     	}
+    
+    
+    /**
+     * Applies the appropriate sign to intensity based on goal type
+     * @param goal The nutrition goal
+     * @return Signed intensity: negative for DECREASE, positive for INCREASE
+     */
+    public int applyGoalTypeSign() {
+        int signedIntensity = this.getgoalType() == GoalType.DECREASE ?
+            -this.getintensity() : this.getintensity();
+        return signedIntensity;
+    }
 	
 	
 }

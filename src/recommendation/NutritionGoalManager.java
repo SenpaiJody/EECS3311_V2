@@ -8,11 +8,16 @@ public class NutritionGoalManager implements INutritionGoalManager {
     private List<GoalChangeListener> listeners;
 
     
+   
     
     public NutritionGoalManager() {
         this.activeGoals = new ArrayList<>();
         this.listeners = new ArrayList<>();
     }
+    
+    
+    
+
     
     @Override
     public void addGoalChangeListener(GoalChangeListener listener) {

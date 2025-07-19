@@ -23,7 +23,7 @@ public class Main {
         NutritionGoal newGoal2 = goalManager.createGoal(
                 124,           // profileId
                 401,                     // nutrientId (e.g., protein)
-                25,                     // intensity (1-100)
+                60,                     // intensity (1-100)
                 GoalType.INCREASE,     // goalType
                 3      // ingredientId
             );

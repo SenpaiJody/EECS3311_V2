@@ -62,11 +62,11 @@ public class Main {
         System.out.println("\n=== Calculate Nutrition for Food Objects ===");
         NutrientProfile allFoodsProfile = nutritionCalc.calculateNutritionProfiles(foods);
         printNutrientProfile(allFoodsProfile, "All Foods");
-
-        // Demo 3: Calculate nutrition from ingredient maps
-        System.out.println("\n=== Calculate Nutrition from Ingredient Maps ===");
-        NutrientProfile fromMaps = nutritionCalc.calculateNutritionProfilesFromMaps(ingredientsList);
-        printNutrientProfile(fromMaps, "From Maps");
+//
+//        // Demo 3: Calculate nutrition from ingredient maps
+//        System.out.println("\n=== Calculate Nutrition from Ingredient Maps ===");
+//        NutrientProfile fromMaps = nutritionCalc.calculateNutritionProfilesFromMaps(ingredientsList);
+//        printNutrientProfile(fromMaps, "From Maps");
 
         // Demo 4: Combine nutrition profiles
         System.out.println("\n=== Combine Nutrition Profiles ===");
