@@ -25,8 +25,8 @@ public class NavBar extends JPanel {
 	private JButton historyBtn;
 	public JButton getHistoryButton() {return historyBtn;}
 	
-	private JButton advisingBtn;
-	public JButton getAdvisingButton() {return advisingBtn;}
+	private JButton addMealBtn;
+	public JButton getaddMealButton() {return addMealBtn;}
 	
 	private JButton CFGBtn;
 	public JButton getCFGButton() {return CFGBtn;}
@@ -49,7 +49,10 @@ public class NavBar extends JPanel {
 		historyBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new MealHistoryPage());
 		});
-		advisingBtn = addBtn("Advised Replacements");
+		addMealBtn = addBtn("Add Meal");
+		addMealBtn.addActionListener(event->{
+			MainWindow.getInstance().setPage(new CreateMealPage());
+		});
 		CFGBtn = addBtn("Canada Food Guide");
 		
 		
@@ -68,6 +71,7 @@ public class NavBar extends JPanel {
 		profileBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new ProfilePage());
 		});
+
 		
 	}
 	
