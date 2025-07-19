@@ -1,5 +1,7 @@
 package food;
 
+/** A foodtype representing a breakfast.
+ * */
 public class Breakfast extends Meal{
 
 	@Override

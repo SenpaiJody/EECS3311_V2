@@ -12,39 +12,59 @@ import userService.IUserDB;
 import userService.Profile;
 import userService.User;
 import userService.Profile.Gender;
+import userService.Profile.Unit;
 
+
+/**A CSV implementation of {@link IUserDB}
+ * */
 public class CSVUserDB implements IUserDB{
 	private final String user_pwd_csv = "data/csv/user_pwd.csv";
 	private final String user_profile_csv = "data/csv/user_profiles.csv";
 	private final String profile_data_csv = "data/csv/profile_data.csv";
 	private final String unique_profileID_csv = "data/csv/unique_profileID.csv";
 	
-	private final Profile.Gender[] gender_lookup = {Gender.MALE,Gender.FEMALE,Gender.OTHER,Gender.UNSPECIFIED};
-
-	private String formatProfile(Profile p) {
-		return String.format("%d,%d,%s,%s,%.2f,%.2f", 
-				p.getID(), 
-				p.getGender().ordinal(), 
-				p.getName(),
-				String.format("%d-%d-%d", p.getDateOfBirth().getYear(),p.getDateOfBirth().getMonthValue(), p.getDateOfBirth().getDayOfMonth()),
-				p.getHeight(),
-				p.getWeight()
+	private final Profile.Gender[] gender_lookup = {Gender.MALE,Gender.FEMALE};
+	private final Profile.Unit[] unit_lookup = {Unit.METRIC, Unit.IMPERIAL};
+	
+	/**a helper function to format a profile into the CSV format
+	 * @param profile profile to format
+	 * @returns CSV string representation of the profile
+	 * */
+	private String formatProfile(Profile profile) {
+		return String.format("%d,%d,%s,%s,%.2f,%.2f,%d", 
+				profile.getID(), 
+				profile.getGender().ordinal(), 
+				profile.getName(),
+				String.format("%d-%d-%d", profile.getDateOfBirth().getYear(),profile.getDateOfBirth().getMonthValue(), profile.getDateOfBirth().getDayOfMonth()),
+				profile.getHeight(),
+				profile.getWeight(),
+				profile.getPreferredUnit() == Unit.METRIC ? 0 : 1
 				);
 	}
 	
+	/**A helper function to update all the profiles in the provided list, 
+	 * reads the profiles and updates profile_data_csv accordingly
+	 * @param profiles - list of profile objects
+	 * */
 	private void updateProfiles(List<Profile> profiles) {
+		List<Profile> temp = new ArrayList<Profile>(profiles.size());
+		
+		for (int i =0 ; i <profiles.size(); i++) {
+			temp.add(profiles.get(i));
+		}
+		
 		StringBuilder sb = new StringBuilder();		
 		
-		for (Profile p : profiles) {
+		for (Profile p : temp) {
 			sb.append(formatProfile(p) + "\n");
 		}
 		
 		CSVDatabaseUtilities.readAndExecute(profile_data_csv, (String line)->{
 			boolean foundMatch = false;
-			for (int i = 0; i < profiles.size(); i++) {
-				if (line.split(",")[0].equals(String.format("%d",profiles.get(i).getID()))) {
+			for (int i = 0; i < temp.size(); i++) {
+				if (line.split(",")[0].equals(String.format("%d",temp.get(i).getID()))) {
 					foundMatch = true;
-					profiles.remove(i);
+					temp.remove(i);
 					break;
 				}
 			}
@@ -55,6 +75,8 @@ public class CSVUserDB implements IUserDB{
 			return true;
 		});
 		
+
+		
 		
 
 		
@@ -64,7 +86,9 @@ public class CSVUserDB implements IUserDB{
 		
 	}
 	
-
+	/** a helper function that gets all of the profiles for the provided userID. 
+	 * searches user_profile_csv then generates profiles based on data in profile_data_csv.
+	 * */
 	private List<Profile> getProfiles(String userID){
 		List<String> ids = new ArrayList<String>();
 		CSVDatabaseUtilities.readAndExecute(user_profile_csv, (String line)->{
@@ -88,11 +112,11 @@ public class CSVUserDB implements IUserDB{
 					String name = elements[2];
 					double height = Double.parseDouble(elements[4]);
 					double weight = Double.parseDouble(elements[5]);
-					
+					Profile.Unit unit = unit_lookup[Integer.parseInt(elements[6])];
 					
 					LocalDate dateOfBirth = LocalDate.of(Integer.parseInt(dateString[0]), Integer.parseInt(dateString[1]), Integer.parseInt(dateString[2]));
 					
- 					profiles.add(new Profile(profileID, name, gender ,dateOfBirth,height,weight));
+ 					profiles.add(new Profile(profileID, name, gender ,dateOfBirth,height,weight, unit));
  					
  					ids.remove(i);
 					break;
@@ -141,23 +165,25 @@ public class CSVUserDB implements IUserDB{
 		return null;
 	}
 
+	//updates all of the profiles (profile_data_csv), then updates the links between that user and its profiles (user_profile_csv)
 	@Override
 	public void updateUser(User u) {
 		updateProfiles(u.getProfiles());
 		StringBuilder sb = CSVDatabaseUtilities.copyContent(user_profile_csv, (String line)->{
 			String[] elements = line.split(",");
-			return elements[0] != u.getUserID();
+			return !elements[0].equals(u.getUserID());
 		});
 		for (Profile p : u.getProfiles()) {
-			sb.append(String.format("%s,%d",u.getUserID(),p.getID()));
+			sb.append(String.format("%s,%d\n",u.getUserID(),p.getID()));
 		}
 		
 		PrintWriter pw = CSVDatabaseUtilities.createPrintWriter(user_profile_csv);
 		pw.print(sb.toString());
 		pw.close();
 		
-		//TODO: update user settings too;.
 	}
+	
+	//registers a user by updating user_pwd_csv
 	@Override
 	public void registerUser(String userID, String password) {	
 		StringBuilder sb = CSVDatabaseUtilities.copyContent(user_pwd_csv, (String s)->true);
@@ -167,6 +193,7 @@ public class CSVUserDB implements IUserDB{
 		pw.close();
 	}
 
+	//generates a new profile ID by incrementing a value in unique_profileID_csv and returning the incremented value
 	@Override
 	public int generateProfileID() {
 		StringBuilder sb = CSVDatabaseUtilities.copyContent(unique_profileID_csv, (String s)->true);

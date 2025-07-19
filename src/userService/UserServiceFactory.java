@@ -3,14 +3,18 @@ package userService;
 import database.CSVUserDB;
 
 
-//Flyweight Factory class that creates IUserService to be used by clients.
-//Implements the singleton pattern; it is also responsible for deciding which implementation should be used
+/** A flyweight factory responsible for creating and storing IUserService objects.
+ * */
 public class UserServiceFactory {
-	private static UserService obj;
+	private static IUserService obj;
 	
+	/** returns a user service. Multiple calls are guaranteed to return the same Object.
+	 * 
+	 * @return IUserService
+	 * */
 	public static IUserService getService() {
 		if (obj == null)
-			obj = new UserService(new CSVUserDB());
+			obj = new UserService(new CSVUserDB()); //right now, this is hardcoded to use a UserService and a CSVUserDB
 		return obj;
 	}
 }
