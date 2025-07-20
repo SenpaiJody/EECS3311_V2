@@ -71,7 +71,7 @@ public class IngredientService implements IIngredientService{
 	            double targetValue = target.get(nutrientID);
 	            double trialValue = nutrientMap.get(nutrientID);
 	            double percentageOff = Math.abs(targetValue - trialValue) / targetValue;
-	            if (percentageOff > 0.0) { // Skip if this nutrient scores poorly (adjust threshold as needed)
+	            if (percentageOff > 0.0 || percentageOff <0.0) { // Skip if this nutrient scores poorly (adjust threshold as needed)
 	                continue;
 	            }
 	        }
