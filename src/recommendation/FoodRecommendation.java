@@ -24,8 +24,8 @@ public class FoodRecommendation implements IFoodRecommendation{
  // Automatically triggered on goal changes
     @Override
     public void onGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals) {
-        System.out.println("\n[INFO] Goals updated for profile " + profileId);
-        System.out.println("[INFO] Number of updated goals: " + updatedGoals.size());
+//        System.out.println("\n[INFO] Goals updated for profile " + profileId);
+//        System.out.println("[INFO] Number of updated goals: " + updatedGoals.size());
         
         if (updatedGoals.isEmpty()) {
             // Clear recommendations if no goals

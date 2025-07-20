@@ -339,7 +339,7 @@ public class NutritionFacade implements INutriCalc {
         // Get nutrition data for all ingredients
         List<Integer> ingredientIds = new ArrayList<>(goalsByIngredient.keySet());
         Map<Integer, Map<Integer, Double>> nutritionDataPer100g =
-                nutrientService.getNutrientsListPer100g(ingredientIds);
+            nutrientService.getNutrientsListPer100g(ingredientIds);
 
         List<NutrientProfile> profiles = new ArrayList<>();
 
@@ -348,24 +348,51 @@ public class NutritionFacade implements INutriCalc {
             Integer ingredientId = entry.getKey();
             List<NutritionGoal> ingredientGoals = entry.getValue();
 
+            System.out.println("\n=== Processing Ingredient ID: " + ingredientId + " ===");
+
             // Group goals by nutrient ID to handle same nutrient modifications
             Map<Integer, Integer> nutrientIntensities = new HashMap<>();
             for (NutritionGoal goal : ingredientGoals) {
                 Integer nutrientId = goal.getnutrientId();
+                
+                // DEBUG: Print raw intensity and goal type
+                System.out.println("Raw Goal - Nutrient ID: " + nutrientId + 
+                                 ", Goal Type: " + goal.getgoalType() + 
+                                 ", Raw Intensity: " + goal.getintensity());
+                
                 int signedIntensity = goal.applyGoalTypeSign();
+                
+                // DEBUG: Print signed intensity
+                System.out.println("Signed Intensity: " + signedIntensity);
+                
                 // Add intensities for same nutrient (handles same ingredient + same nutrient case)
                 nutrientIntensities.merge(nutrientId, signedIntensity, Integer::sum);
             }
 
+            // DEBUG: Print final nutrient intensities map
+            System.out.println("Final Nutrient Intensities Map: " + nutrientIntensities);
+
             // Use the modified calculationService method with multiple nutrients
             NutrientProfile ingredientProfile = calculationService.createIdealIngredientProfile(
-                    ingredientId, nutrientIntensities, nutritionDataPer100g);
+                ingredientId, nutrientIntensities, nutritionDataPer100g);
 
             if (ingredientProfile != null) {
+                // DEBUG: Print the resulting profile with actual nutrient values
+                System.out.println("Created NutrientProfile for ingredient " + ingredientId + ":");
+                if (ingredientProfile.getAllNutrients() != null) {
+                    for (Map.Entry<Integer, Double> entry1 : ingredientProfile.getAllNutrients().entrySet()) {
+                        System.out.println("  Nutrient " + entry1.getKey() + ": " + entry1.getValue());
+                    }
+                } else {
+                    System.out.println("  No nutrients in profile!");
+                }
                 profiles.add(ingredientProfile);
+            } else {
+                System.out.println("WARNING: createIdealIngredientProfile returned null for ingredient " + ingredientId);
             }
         }
 
+        System.out.println("\n=== Final Profiles Count: " + profiles.size() + " ===");
         return profiles;
     }
 
