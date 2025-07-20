@@ -47,7 +47,7 @@ public class FoodRecommendation implements IFoodRecommendation{
     
     // Main method - returns list of lists of recommended ingredient IDs
     public List<List<Integer>> getRecommendations(List <NutritionGoal> goal) {
-        return getRecommendations(goal, 4); // Default limit of 10
+        return getRecommendations(goal, 4); // Default limit of 4
     }
     
     // Method to handle multiple goals
@@ -65,30 +65,40 @@ public class FoodRecommendation implements IFoodRecommendation{
                 return new ArrayList<>();
             }
             
-            // 2. Get matching ingredients for each profile and score them separately
-            System.out.println("\n--- Step 2: Finding and scoring matching ingredients for each profile separately ---");
+            // 2. Extract nutrient IDs and goal types from all goals for the new method signature
+            System.out.println("\n--- Step 2: Extracting nutrient IDs and goal types from all goals ---");
+            List<Integer> allNutrientIds = goals.stream()
+                .map(NutritionGoal::getnutrientId)
+                .collect(Collectors.toList());
+            List<GoalType> allGoalTypes = goals.stream()
+                .map(NutritionGoal::getgoalType)
+                .collect(Collectors.toList());
+            
+            System.out.println("All nutrient IDs: " + allNutrientIds);
+            System.out.println("All goal types: " + allGoalTypes);
+            
+            // 3. Get matching ingredients for each profile and score them separately
+            System.out.println("\n--- Step 3: Finding and scoring matching ingredients for each profile separately ---");
             List<List<Integer>> allRecommendations = new ArrayList<>();
             
             for (int i = 0; i < idealProfiles.size(); i++) {
                 NutrientProfile profile = idealProfiles.get(i);
                 NutritionGoal currentGoal = goals.get(i);
                 System.out.println("Processing profile " + (i + 1) + " with " + 
-                                 profile.getAllNutrients().size() + " nutrients" + "nutrientID in goal" + currentGoal.getnutrientId());
+                                 profile.getAllNutrients().size() + " nutrients" + " nutrientID in goal " + currentGoal.getnutrientId());
         
-                // Get matching ingredients for this profile
+                // Get matching ingredients for this profile using the new method signature
                 List<Integer> matchingIngredients = ingredientService.getIngredientMatchingNutrients(
                     profile.getAllNutrients(), 
-                    limit * 2 ,// Get more candidates to have better selection, 
-                    currentGoal.getnutrientId(),
-                    currentGoal.getgoalType()
-                    
+                    limit * 2, // Get more candidates to have better selection
+                    allNutrientIds, // Pass all nutrient IDs as list
+                    allGoalTypes    // Pass all goal types as list
                 );
                 
                 System.out.println("  Found " + matchingIngredients.size() + " matching ingredients for profile " + (i + 1));
                 
                 // Score ingredients for this profile separately
                 List<ScoredIngredient> scoredIngredientsForProfile = new ArrayList<>();
-//                NutritionGoal currentGoal = goals.get(i);
                 int goalFoodGroup = ingredientService.getFoodGroup(currentGoal.getingredientId());
                 
                 for (int j = 0; j < matchingIngredients.size(); j++) {
@@ -146,7 +156,5 @@ public class FoodRecommendation implements IFoodRecommendation{
             this.score = score;
         }
     }
-
-
 
 }

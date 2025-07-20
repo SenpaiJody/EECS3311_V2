@@ -47,8 +47,15 @@ public class IngredientService implements IIngredientService{
 	 * saving the best 'maxResult' entries and returning them
 	 * 
 	 * */
+	// Interface method implementation - handles lists of nutrients and goals
 	@Override
-	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID, GoalType type) {
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, 
+	                                                   List<Integer> nutrientID, List<GoalType> type) {
+	    // Validation: ensure both lists have the same size
+	    if (nutrientID != null && type != null && nutrientID.size() != type.size()) {
+	        throw new IllegalArgumentException("nutrientID and type lists must have the same size");
+	    }
+	    
 	    //backwards priority queue (actually a minQueue; this is so that the option at the head is the "worst" one and can be quickly popped out to keep the size to maxResults
 	    PriorityQueue<Map.Entry<Integer,Double>> pq = new PriorityQueue<Map.Entry<Integer,Double>>((pair1, pair2)->{
 	        return pair1.getValue() - pair2.getValue() > 0 ? -1 : 1;
@@ -70,21 +77,35 @@ public class IngredientService implements IIngredientService{
 	    for (Map.Entry<Integer,Map<Integer,Double>> entry : totalNutrientMapList.entrySet()) {
 	        Map<Integer,Double> nutrientMap = entry.getValue();
 
-	        // Filter: Skip scoring if the specific nutrient doesn't score well
-	        if (nutrientID != null) {
-	            double targetValue = target.get(nutrientID);
-	            double trialValue = nutrientMap.get(nutrientID);
-	            if (type == GoalType.DECREASE) {
-	                // For DECREASE: we want trial < target (ingredient has less of this nutrient)
-	                if (trialValue > targetValue) {
-	                    continue; // Skip if trial >= target
-	                }
-	            } else if (type == GoalType.INCREASE) {
-	                // For INCREASE: we want trial > target (ingredient has more of this nutrient)  
-	                if (trialValue < targetValue) {
-	                    continue; // Skip if trial <= target
+	        // Filter: Skip scoring if any of the specific nutrients don't meet their goal criteria
+	        boolean skipIngredient = false;
+	        
+	        if (nutrientID != null && type != null) {
+	            for (int i = 0; i < nutrientID.size(); i++) {
+	                Integer currentNutrientID = nutrientID.get(i);
+	                GoalType currentGoalType = type.get(i);
+	                
+	                double targetValue = target.get(currentNutrientID);
+	                double trialValue = nutrientMap.get(currentNutrientID);
+	                
+	                if (currentGoalType == GoalType.DECREASE) {
+	                    // For DECREASE: we want trial < target (ingredient has less of this nutrient)
+	                    if (trialValue > targetValue) {
+	                        skipIngredient = true;
+	                        break; // Exit the loop early if any condition fails
+	                    }
+	                } else if (currentGoalType == GoalType.INCREASE) {
+	                    // For INCREASE: we want trial > target (ingredient has more of this nutrient)  
+	                    if (trialValue < targetValue) {
+	                        skipIngredient = true;
+	                        break; // Exit the loop early if any condition fails
+	                    }
 	                }
 	            }
+	        }
+	        
+	        if (skipIngredient) {
+	            continue; // Skip this ingredient if it doesn't meet any of the goal criteria
 	        }
 
 	        double score = scorer.scoreLikeness(target, nutrientMap);
@@ -92,6 +113,7 @@ public class IngredientService implements IIngredientService{
 	        if (pq.size() > maxResults)
 	            pq.poll();
 	    }
+	    
 	    List<Integer> retVal = new ArrayList<Integer>();
 	    while (pq.size() > 0) {
 	        retVal.add(pq.poll().getKey());
@@ -104,6 +126,22 @@ public class IngredientService implements IIngredientService{
 
 	    return reversed;
 	}	
+	
+	// Helper method for single nutrient/goal (if you still need backward compatibility)
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, 
+	                                                   Integer singleNutrientID, GoalType singleType) {
+	    if (singleNutrientID == null || singleType == null) {
+	        return getIngredientMatchingNutrients(target, maxResults, (List<Integer>)null, (List<GoalType>)null);
+	    }
+	    
+	    List<Integer> nutrientList = new ArrayList<>();
+	    nutrientList.add(singleNutrientID);
+	    
+	    List<GoalType> typeList = new ArrayList<>();
+	    typeList.add(singleType);
+	    
+	    return getIngredientMatchingNutrients(target, maxResults, nutrientList, typeList);
+	}
 	
 	
 	

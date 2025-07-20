@@ -45,6 +45,10 @@ public interface IIngredientService {
 	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID, GoalType type);
 	
 	
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults,List <Integer> nutrientID, List <GoalType> type);
+	
+	
+	
 	/**Gets the food group ID of the provided ingredient
 	 * @param ingredientID - the ingredient to search for
 	 * 
