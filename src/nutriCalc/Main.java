@@ -8,12 +8,6 @@ import food.Breakfast;
 import food.Food;
 import nutriCalc.INutriCalc;
 import nutriCalc.NutritionFacade;
-import recommendation.FoodRecommendation;
-import recommendation.GoalType;
-import recommendation.IFoodRecommendation;
-import recommendation.INutritionGoalManager;
-import recommendation.NutritionGoal;
-import recommendation.NutritionGoalManager;
 import nutriCalc.NutrientProfile;
 
 public class Main {
@@ -93,87 +87,6 @@ public class Main {
         for (Map.Entry<Integer, Double> entry : differences.entrySet()) {
             System.out.println("  Nutrient " + entry.getKey() + ": " + entry.getValue());
         }
-        
-        
-        // Demo 5: NUTRIENT PROFILE BEFORE/AFTER IDEAL PROFILE CREATION
-        System.out.println("\n\n=== NUTRIENT PROFILE BEFORE/AFTER IDEAL PROFILE CREATION ===");
-        
-        // Get original nutrient profile for ingredient 67 (100g)
-        Map<Integer, Double> originalIngredient = new HashMap<>();
-        originalIngredient.put(67, 100.0); // 100g of ingredient 67
-        NutrientProfile originalProfile = nutritionCalc.calculateNutritionProfiles(originalIngredient);
-        printNutrientProfile(originalProfile, "ORIGINAL Profile for Ingredient 67 (100g)");
-
-        // Set up goal manager and recommendation system
-        INutritionGoalManager goalManager = new NutritionGoalManager();
-        IFoodRecommendation recommendationSystem = new FoodRecommendation();
-        goalManager.addGoalChangeListener(recommendationSystem);
-
-        // Create and add DECREASE goal
-        System.out.println("\n--- Creating DECREASE Goal ---");
-        NutritionGoal decreaseGoal = goalManager.createGoal(
-            123,           // profileId
-            401,           // nutrientId (e.g., protein)
-            60,            // intensity (1-100)
-            GoalType.DECREASE, // goalType
-            67             // ingredientId
-        );
-
-        boolean decreaseAdded = goalManager.addGoal(123, decreaseGoal);
-        System.out.println("DECREASE Goal added: " + decreaseAdded);
-        System.out.println("DECREASE Goal ID: " + decreaseGoal.getgoalId());
-
-        // Get recommendations for DECREASE goal
-        System.out.println("\n=== Recommendations after DECREASE Goal ===");
-        try {
-            List<List<Integer>> decreaseRecs = recommendationSystem.getLatestRecommendations(123);
-            if (decreaseRecs != null && !decreaseRecs.isEmpty()) {
-                for (int i = 0; i < decreaseRecs.size(); i++) {
-                    System.out.println("DECREASE Goal " + (i + 1) + " recommendations: " + decreaseRecs.get(i));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error getting DECREASE recommendations: " + e.getMessage());
-        }
-
-        // Create and add INCREASE goal
-        System.out.println("\n--- Creating INCREASE Goal ---");
-        NutritionGoal increaseGoal = goalManager.createGoal(
-            124,           // profileId
-            401,           // nutrientId (e.g., protein)
-            60,            // intensity (1-100)
-            GoalType.INCREASE, // goalType
-            67             // ingredientId
-        );
-
-        boolean increaseAdded = goalManager.addGoal(124, increaseGoal);
-        System.out.println("INCREASE Goal added: " + increaseAdded);
-        System.out.println("INCREASE Goal ID: " + increaseGoal.getgoalId());
-
-        // Get recommendations for INCREASE goal
-        System.out.println("\n=== Recommendations after INCREASE Goal ===");
-        try {
-            List<List<Integer>> increaseRecs = recommendationSystem.getLatestRecommendations(124);
-            if (increaseRecs != null && !increaseRecs.isEmpty()) {
-                for (int i = 0; i < increaseRecs.size(); i++) {
-                    System.out.println("INCREASE Goal " + (i + 1) + " recommendations: " + increaseRecs.get(i));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error getting INCREASE recommendations: " + e.getMessage());
-        }
-
-        // Compare results
-        System.out.println("\n=== COMPARISON SUMMARY ===");
-        System.out.println("Original ingredient 67 (100g) profile calculated above");
-        System.out.println("DECREASE goal should produce modified profiles with LESS nutrient 401");
-        System.out.println("INCREASE goal should produce modified profiles with MORE nutrient 401");
-        System.out.println("If both goals produce the same recommendations, there's a bug in the signing logic!");
-        
-        
-        
-        
-        
 //
 //        // Demo 6: Create ideal ingredient
 //        System.out.println("\n=== Create Ideal Ingredient ===");

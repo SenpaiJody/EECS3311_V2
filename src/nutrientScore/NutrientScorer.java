@@ -20,7 +20,7 @@ public class NutrientScorer {
 			}
 			double trialValue = trial.get(key);
 			double percentageOff = Math.abs(targetValue-trialValue)/targetValue;
-			finalScore += Math.max(0, 1 - percentageOff);
+			finalScore += 1-percentageOff > 1 ? 1 : percentageOff;
 		}
 		
 		finalScore /= target.size();
