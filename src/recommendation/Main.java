@@ -19,7 +19,7 @@ public class Main {
             208,                     // nutrientId (e.g., protein)
             28,                     // intensity (1-100)
             GoalType.INCREASE,     // goalType
-            501841       // ingredientId
+            4       // ingredientId
         );
         
         
@@ -153,24 +153,24 @@ public class Main {
 //        }
 //        
 //        
-//        System.out.println("\n=== Final Summary - All Recommendations2 ===");
-//        List<List<Integer>> finalRecs2 = new ArrayList<>();
-//
-//        try {
-//            finalRecs = recommendationSystem.getLatestRecommendations(124);
-//            
-//            if (finalRecs != null && !finalRecs.isEmpty()) {
-//                for (int i = 0; i < finalRecs.size(); i++) {
-//                    System.out.println("Goal " + (i + 1) + " final recommendations: " + finalRecs.get(i));
-//                }
-//            } else {
-//                System.out.println("No recommendations found for profile 124");
-//            }
-//            
-//        } catch (Exception e) {
-//            System.out.println("Error getting recommendations: " + e.getMessage());
-//            e.printStackTrace();
-//        }
+        System.out.println("\n=== Final Summary - All Recommendations2 ===");
+        List<List<Integer>> finalRecs2 = new ArrayList<>();
+
+        try {
+            finalRecs2 = recommendationSystem.getLatestRecommendations(123);
+            
+            if (finalRecs2 != null && !finalRecs2.isEmpty()) {
+                for (int i = 0; i < finalRecs2.size(); i++) {
+                    System.out.println("Goal " + (i + 1) + " final recommendations: " + finalRecs2.get(i));
+                }
+            } else {
+                System.out.println("No recommendations found for profile 124");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Error getting recommendations: " + e.getMessage());
+            e.printStackTrace();
+        }
         
         
     }
