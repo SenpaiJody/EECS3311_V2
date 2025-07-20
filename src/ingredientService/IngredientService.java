@@ -76,12 +76,12 @@ public class IngredientService implements IIngredientService{
 	            double trialValue = nutrientMap.get(nutrientID);
 	            if (type == GoalType.DECREASE) {
 	                // For DECREASE: we want trial < target (ingredient has less of this nutrient)
-	                if (trialValue >= targetValue) {
+	                if (trialValue > targetValue) {
 	                    continue; // Skip if trial >= target
 	                }
 	            } else if (type == GoalType.INCREASE) {
 	                // For INCREASE: we want trial > target (ingredient has more of this nutrient)  
-	                if (trialValue <= targetValue) {
+	                if (trialValue < targetValue) {
 	                    continue; // Skip if trial <= target
 	                }
 	            }

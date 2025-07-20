@@ -18,7 +18,7 @@ public class Main {
             123,           // profileId
             208,                     // nutrientId (e.g., protein)
             28,                     // intensity (1-100)
-            GoalType.DECREASE,     // goalType
+            GoalType.INCREASE,     // goalType
             501841       // ingredientId
         );
         
