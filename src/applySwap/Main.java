@@ -1,9 +1,5 @@
 package applySwap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.time.LocalDate;
 import java.util.*;
 import food.FoodType;
@@ -18,9 +14,9 @@ public class Main {
         
         // Sample ingredients
         Map<Integer, Double> pancakeIngredients = new HashMap<>();
-        pancakeIngredients.put(1, 200.0);
-        pancakeIngredients.put(2, 250.0); 
-        pancakeIngredients.put(3, 2.0);
+        pancakeIngredients.put(4, 100.0);
+//        pancakeIngredients.put(2, 250.0);
+//        pancakeIngredients.put(3, 2.0);
         
         Map<Integer, Double> saladIngredients = new HashMap<>();
         saladIngredients.put(4, 100.0); 
