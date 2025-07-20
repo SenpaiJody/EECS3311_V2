@@ -75,7 +75,7 @@ class FilteredNutrientServiceProxy implements INutrientService{
 		return originalService.getNutrientUnit(nutrientID);
 	}
 
-	//does all the processing required 
+	//does all the processing required (as of right now, it is filtering out unwanted ingredients and adding missing ingredients (with an amount of zero)
 	private Map<Integer, Double> process (Map<Integer, Double> original){
 		return addMissing(filter(original));
 	}
@@ -109,5 +109,41 @@ class FilteredNutrientServiceProxy implements INutrientService{
 			retVal.add(ALLOWED_NUTRIENT_IDS[i]);
 		}
 		return retVal;
+	}
+
+	@Override
+	public INutrientIterator getIterator() {
+		return new FilteredIteratorProxy(originalService.getIterator());
+	}
+	
+	private class FilteredIteratorProxy implements INutrientIterator{
+		INutrientIterator originalIterator;
+		
+		private FilteredIteratorProxy(INutrientIterator originalIterator){
+			this.originalIterator = originalIterator;
+		}
+		@Override
+		public int getIngredientID() {
+			return originalIterator.getIngredientID();
+		}
+
+		/** Removes all nutrients not in the ALLOWED_NUTRIENT_LIST, and adds in values that are supposed to be there
+		 * */
+		@Override
+		public Map<Integer, Double> getNutrientMap() {
+			return process(originalIterator.getNutrientMap());
+		}
+
+		@Override
+		public void next() {
+			originalIterator.next();
+			
+		}
+
+		@Override
+		public boolean hasNext() {
+			return originalIterator.hasNext();
+		}
+		
 	}
 }

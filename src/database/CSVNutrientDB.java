@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nutrientService.INutrientIterator;
 import nutrientService.INutrientService;
 
 
@@ -159,4 +160,11 @@ public class CSVNutrientDB implements INutrientService {
 		return ids;
 	}
 
+	/** {@inheritDoc}
+	 * 	<p>Uses a {@link CSVNutrientIterator}
+	 * */
+	@Override
+	public INutrientIterator getIterator() {
+		return new CSVNutrientIterator(nutrient_amount_csv);
+	}
 }
