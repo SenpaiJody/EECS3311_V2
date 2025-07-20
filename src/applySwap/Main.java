@@ -21,12 +21,12 @@ public class Main {
         Map<Integer, Double> saladIngredients = new HashMap<>();
         saladIngredients.put(4, 100.0); 
         saladIngredients.put(5, 50.0);  
-        saladIngredients.put(6, 30.0);  
+        saladIngredients.put(501841, 30.0);  
         
         Map<Integer, Double> omeletteIngredients = new HashMap<>();
         omeletteIngredients.put(3, 3.0);
         omeletteIngredients.put(7, 50.0);
-        omeletteIngredients.put(8, 20.0);
+        omeletteIngredients.put(502834, 20.0);
         
         Breakfast breakfast = new Breakfast();
         Lunch lunch = new Lunch();
@@ -53,12 +53,12 @@ public class Main {
         // Demo 1: Single ingredient swap
         System.out.println("\n=== DEMO 1: Single Ingredient Swap ===");
         System.out.println("Swapping ingredient 1 (flour) with ingredient 101 (almond flour)");
-        
-        List<Integer> oldIngredients1 = Arrays.asList(1);
-        List<Integer> newIngredients1 = Arrays.asList(101);
-        
-        List<Food> singleSwapResult = applySwap.applySwaps(newIngredients1, oldIngredients1, foods);
-        printFoodList(singleSwapResult);
+//        
+//        List<Integer> oldIngredients1 = Arrays.asList(1);
+//        List<Integer> newIngredients1 = Arrays.asList(101);
+//        
+//        List<Food> singleSwapResult = applySwap.applySwaps(newIngredients1, oldIngredients1, foods);
+//        printFoodList(singleSwapResult);
         
         // Demo 2: Multiple ingredient swaps
         System.out.println("\n=== DEMO 2: Multiple Ingredient Swaps ===");
@@ -67,8 +67,8 @@ public class Main {
         System.out.println("  - ingredient 3 (eggs) -> ingredient 103 (egg substitute)");
         System.out.println("  - ingredient 7 (cheese) -> ingredient 107 (vegan cheese)");
         
-        List<Integer> oldIngredients2 = Arrays.asList(2, 3, 7);
-        List<Integer> newIngredients2 = Arrays.asList(102, 103, 107);
+        List<Integer> oldIngredients2 = Arrays.asList(501841);
+        List<Integer> newIngredients2 = Arrays.asList(502834);
         
         List<Food> multipleSwapResult = applySwap.applySwaps(newIngredients2, oldIngredients2, foods);
         printFoodList(multipleSwapResult);
