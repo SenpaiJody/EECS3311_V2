@@ -79,7 +79,8 @@ public class FoodRecommendation implements IFoodRecommendation{
                 List<Integer> matchingIngredients = ingredientService.getIngredientMatchingNutrients(
                     profile.getAllNutrients(), 
                     limit * 2 ,// Get more candidates to have better selection, 
-                    currentGoal.getnutrientId()
+                    currentGoal.getnutrientId(),
+                    currentGoal.getgoalType()
                     
                 );
                 

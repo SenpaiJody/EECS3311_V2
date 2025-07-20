@@ -1,6 +1,7 @@
 package ingredientService;
 
 import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Queue;
 import nutrientScore.NutrientScorer;
 import nutrientService.INutrientService;
 import nutrientService.NutrientServiceFactory;
+import recommendation.GoalType;
 
 /**An implementation of IIngredientService that: 
  * <ul>
@@ -21,6 +23,8 @@ import nutrientService.NutrientServiceFactory;
  * <p> This allows the IUserDB to focus more on CRUD actions while still fulfilling the IIngredientService interface.
  * */
 public class IngredientService implements IIngredientService{
+	private static final boolean DESCREASES = false;
+
 	private IIngredientDB db;
 	
 	private TrieNode ingredientSearchTrieRoot;
@@ -44,7 +48,7 @@ public class IngredientService implements IIngredientService{
 	 * 
 	 * */
 	@Override
-	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID) {
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID, GoalType type) {
 	    //backwards priority queue (actually a minQueue; this is so that the option at the head is the "worst" one and can be quickly popped out to keep the size to maxResults
 	    PriorityQueue<Map.Entry<Integer,Double>> pq = new PriorityQueue<Map.Entry<Integer,Double>>((pair1, pair2)->{
 	        return pair1.getValue() - pair2.getValue() > 0 ? -1 : 1;
@@ -70,9 +74,16 @@ public class IngredientService implements IIngredientService{
 	        if (nutrientID != null) {
 	            double targetValue = target.get(nutrientID);
 	            double trialValue = nutrientMap.get(nutrientID);
-	            double percentageOff = Math.abs(targetValue - trialValue) / targetValue;
-	            if (percentageOff > 0.5 || percentageOff <0.5) { // Skip if this nutrient scores poorly (adjust threshold as needed)
-	                continue;
+	            if (type == GoalType.DECREASE) {
+	                // For DECREASE: we want trial < target (ingredient has less of this nutrient)
+	                if (trialValue >= targetValue) {
+	                    continue; // Skip if trial >= target
+	                }
+	            } else if (type == GoalType.INCREASE) {
+	                // For INCREASE: we want trial > target (ingredient has more of this nutrient)  
+	                if (trialValue <= targetValue) {
+	                    continue; // Skip if trial <= target
+	                }
 	            }
 	        }
 
