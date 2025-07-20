@@ -24,11 +24,11 @@ public class Main {
         
         
         NutritionGoal newGoal2 = goalManager.createGoal(
-                124,           // profileId
+                123,           // profileId
                 401,                     // nutrientId (e.g., protein)
                 100,                     // intensity (1-100)
-                GoalType.INCREASE,     // goalType
-                4     // ingredientId
+                GoalType.DECREASE,     // goalType
+                501841     // ingredientId
             );
         
 //        boolean added2 = goalManager.addGoal(124, newGoal2);
@@ -50,9 +50,9 @@ public class Main {
             System.out.println("Error getting recommendations: " + e.getMessage());
         }
 
-//        // Check profile's active goals
-//        List<NutritionGoal> profileGoals = goalManager.getActiveGoals(123);
-//        System.out.println("\nProfile has " + profileGoals.size() + " active goals");
+        // Check profile's active goals
+        List<NutritionGoal> profileGoals = goalManager.getActiveGoals(123);
+        System.out.println("\nProfile has " + profileGoals.size() + " active goals");
 //        
 //        List<NutritionGoal> profileGoals2 = goalManager.getActiveGoals(124);
 //        System.out.println("\nProfile has " + profileGoals.size() + " active goals");
@@ -70,7 +70,7 @@ public class Main {
 //            2
 //        );
 //
-//        goalManager.addGoal(123, anotherGoal);
+        goalManager.addGoal(123, newGoal2);
 //        System.out.println("Second goal ID: " + anotherGoal.getgoalId());
 //        System.out.println("Total goals for profile: " + 
 //                          goalManager.getActiveGoals(123).size());
