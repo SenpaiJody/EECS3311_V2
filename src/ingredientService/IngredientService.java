@@ -44,44 +44,54 @@ public class IngredientService implements IIngredientService{
 	 * 
 	 * */
 	@Override
-	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults) {
-		//backwards priority queue (actually a minQueue; this is so that the option at the head is the "worst" one and can be quickly popped out to keep the size to maxResults
-		PriorityQueue<Map.Entry<Integer,Double>> pq = new PriorityQueue<Map.Entry<Integer,Double>>((pair1, pair2)->{
-			return pair1.getValue() - pair2.getValue() > 0 ? -1 : 1;
-		});
-		
-		IIngredientIterator iterator = db.getIterator();
-		INutrientService nutrientService = NutrientServiceFactory.getService();
-		
-		List<Integer> totalIngredientList = new ArrayList<Integer>();
-		while (iterator.hasNext()) {
-			totalIngredientList.add(iterator.getID());
-			iterator.next();
-		}
-		
-		Map<Integer,Map<Integer,Double>> totalNutrientMapList = nutrientService.getNutrientsListPer100g(totalIngredientList);
-		
-		NutrientScorer scorer = new NutrientScorer();
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID) {
+	    //backwards priority queue (actually a minQueue; this is so that the option at the head is the "worst" one and can be quickly popped out to keep the size to maxResults
+	    PriorityQueue<Map.Entry<Integer,Double>> pq = new PriorityQueue<Map.Entry<Integer,Double>>((pair1, pair2)->{
+	        return pair1.getValue() - pair2.getValue() > 0 ? -1 : 1;
+	    });
 
-		for (Map.Entry<Integer,Map<Integer,Double>> entry : totalNutrientMapList.entrySet()) {
-			Map<Integer,Double> nutrientMap = entry.getValue();
-			
-			double score = scorer.scoreLikeness(target, nutrientMap);
-			pq.add(Map.entry(entry.getKey(), score));
-			if (pq.size() > maxResults)
-				pq.poll();
-		}		
-		List<Integer> retVal = new ArrayList<Integer>();
-		while (pq.size() > 0) {
-			retVal.add(pq.poll().getKey());
-		}
-		
-		List<Integer> reversed = new ArrayList<Integer>(retVal.size());
-		for (int i = retVal.size()-1; i >= 0; i--) {
-			reversed.add(retVal.get(i));
-		}
-		
-		return reversed;
+	    IIngredientIterator iterator = db.getIterator();
+	    INutrientService nutrientService = NutrientServiceFactory.getService();
+
+	    List<Integer> totalIngredientList = new ArrayList<Integer>();
+	    while (iterator.hasNext()) {
+	        totalIngredientList.add(iterator.getID());
+	        iterator.next();
+	    }
+
+	    Map<Integer,Map<Integer,Double>> totalNutrientMapList = nutrientService.getNutrientsListPer100g(totalIngredientList);
+
+	    NutrientScorer scorer = new NutrientScorer();
+
+	    for (Map.Entry<Integer,Map<Integer,Double>> entry : totalNutrientMapList.entrySet()) {
+	        Map<Integer,Double> nutrientMap = entry.getValue();
+
+	        // Filter: Skip scoring if the specific nutrient doesn't score well
+	        if (nutrientID != null) {
+	            double targetValue = target.get(nutrientID);
+	            double trialValue = nutrientMap.get(nutrientID);
+	            double percentageOff = Math.abs(targetValue - trialValue) / targetValue;
+	            if (percentageOff > 0.5) { // Skip if this nutrient scores poorly (adjust threshold as needed)
+	                continue;
+	            }
+	        }
+
+	        double score = scorer.scoreLikeness(target, nutrientMap);
+	        pq.add(Map.entry(entry.getKey(), score));
+	        if (pq.size() > maxResults)
+	            pq.poll();
+	    }
+	    List<Integer> retVal = new ArrayList<Integer>();
+	    while (pq.size() > 0) {
+	        retVal.add(pq.poll().getKey());
+	    }
+
+	    List<Integer> reversed = new ArrayList<Integer>(retVal.size());
+	    for (int i = retVal.size()-1; i >= 0; i--) {
+	        reversed.add(retVal.get(i));
+	    }
+
+	    return reversed;
 	}	
 	
 	

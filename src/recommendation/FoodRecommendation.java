@@ -71,20 +71,23 @@ public class FoodRecommendation implements IFoodRecommendation{
             
             for (int i = 0; i < idealProfiles.size(); i++) {
                 NutrientProfile profile = idealProfiles.get(i);
+                NutritionGoal currentGoal = goals.get(i);
                 System.out.println("Processing profile " + (i + 1) + " with " + 
-                                 profile.getAllNutrients().size() + " nutrients");
-                
+                                 profile.getAllNutrients().size() + " nutrients" + "nutrientID in goal" + currentGoal.getnutrientId());
+        
                 // Get matching ingredients for this profile
                 List<Integer> matchingIngredients = ingredientService.getIngredientMatchingNutrients(
                     profile.getAllNutrients(), 
-                    limit * 2 // Get more candidates to have better selection
+                    limit * 2 ,// Get more candidates to have better selection, 
+                    currentGoal.getnutrientId()
+                    
                 );
                 
                 System.out.println("  Found " + matchingIngredients.size() + " matching ingredients for profile " + (i + 1));
                 
                 // Score ingredients for this profile separately
                 List<ScoredIngredient> scoredIngredientsForProfile = new ArrayList<>();
-                NutritionGoal currentGoal = goals.get(i);
+//                NutritionGoal currentGoal = goals.get(i);
                 int goalFoodGroup = ingredientService.getFoodGroup(currentGoal.getingredientId());
                 
                 for (int j = 0; j < matchingIngredients.size(); j++) {
