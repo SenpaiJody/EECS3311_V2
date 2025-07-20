@@ -41,7 +41,7 @@ public interface IIngredientService {
 	 * 
 	 * @return A list of ingredientIDs that best match the nutrient amounts provided.
 	 * */
-	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> nutrients, int maxResults);
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID);
 	
 	
 	/**Gets the food group ID of the provided ingredient
