@@ -35,8 +35,6 @@ public class MultiPiePlot extends Plot {
         return "Multi Pie Chart with Titles";
     }
 
-
-
     @Override
 	@SuppressWarnings("rawtypes")
 	public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,

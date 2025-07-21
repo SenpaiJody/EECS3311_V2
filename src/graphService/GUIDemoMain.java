@@ -108,9 +108,9 @@ public class GUIDemoMain {
 	 */
 	
 
-//	FoodGroupMode foodGroupMode = new FoodGroupMode();
-//	JFreeChart foodGroupChart = graphService.createGraph(data,foodGroupMode);
-//	DisplayChart(foodGroupChart);
+	FoodGroupMode foodGroupMode = new FoodGroupMode();
+	JFreeChart foodGroupChart = graphService.createGraph(data,foodGroupMode);
+	DisplayChart(foodGroupChart);
 
 	/*Protein (203) g, Fats (204) g, Carbohydrates (205) g, Calories (208),kcal
 	 * Cholesterol (601), Sodium (307), Potassium (306), Calcium(301),
@@ -122,9 +122,9 @@ public class GUIDemoMain {
 //	JFreeChart nutrientByDateChart =  graphService.createGraph(data, nutrientByDateMode);
 //	DisplayChart(nutrientByDateChart);
 
-	AvgGraphMode avgGraphMode = new AvgGraphMode();
-	JFreeChart avgGraphChart =  graphService.createGraph(data, avgGraphMode);
-	DisplayChart(avgGraphChart);
+//	AvgGraphMode avgGraphMode = new AvgGraphMode();
+//	JFreeChart avgGraphChart =  graphService.createGraph(data, avgGraphMode);
+//	DisplayChart(avgGraphChart);
 
 //	TotalGraphMode totalGraphMode = new TotalGraphMode();
 //	JFreeChart totalGraphChart =  graphService.createGraph(data, totalGraphMode);
