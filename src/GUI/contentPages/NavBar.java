@@ -46,7 +46,7 @@ public class NavBar extends JPanel {
 		});
 		
 		
-		historyBtn = addBtn("History");
+		historyBtn = addBtn("Meal History");
 		historyBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new MealHistoryPage());
 		});
@@ -54,7 +54,7 @@ public class NavBar extends JPanel {
 		addMealBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new CreateMealPage());
 		});
-		statsBtn = addBtn("Statistics");
+		statsBtn = addBtn("Graphs & Comparisons");
 		statsBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new StatisticsPage());
 		});

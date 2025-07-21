@@ -16,10 +16,13 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 
 import GUI.GBCUtility;
+import GUI.MainWindow;
 import GUI.contentPages.BasicPage;
+import GUI.contentPages.statistics.StatisticsPage;
 import GUI.reusables.IngredientListItem;
 import GUI.reusables.IngredientQuantityListItem;
 import GUI.reusables.PanelList;
@@ -71,10 +74,19 @@ public class AdvisingPage extends BasicPage{
 
 		getInnerPanel().setLayout(new GridBagLayout());
 		
-		getInnerPanel().add(createGoalCreationPanel(), GBCUtility.createFiller(0,0));
-		getInnerPanel().add(createSwapRecommendationPanel(), GBCUtility.createFiller(1,0));
-		getInnerPanel().add(createDifferenceViewerPanel(), GBCUtility.createFiller(2, 0));
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		JSplitPane innerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		outerSplitPane.setTopComponent(createGoalCreationPanel());
+		innerSplitPane.setTopComponent(createSwapRecommendationPanel());
+		innerSplitPane.setBottomComponent(createDifferenceViewerPanel());
+		outerSplitPane.setBottomComponent(innerSplitPane);
 		
+		outerSplitPane.setEnabled(false);
+		outerSplitPane.setResizeWeight(0);
+		innerSplitPane.setEnabled(false);
+		innerSplitPane.setResizeWeight(0.5);
+		
+		getInnerPanel().add(outerSplitPane, GBCUtility.createFiller(0, 0));
 	}
 	
 
@@ -96,7 +108,7 @@ public class AdvisingPage extends BasicPage{
 	private JPanel createGoalCreationPanel() {
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new GridBagLayout());
 		panel.add(createSectionTitle(1, "Define your goals"), GBCUtility.createGBC(0, 0));
 		
@@ -161,7 +173,8 @@ public class AdvisingPage extends BasicPage{
 	private JPanel createSwapRecommendationPanel() {
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
+		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new GridBagLayout());
 		panel.add(createSectionTitle(2,"Select a Swap"), GBCUtility.createGBC(0, 0));
 		JButton loadRecommendationsBtn = new JButton("Load Recommendations");
@@ -221,7 +234,6 @@ public class AdvisingPage extends BasicPage{
 					swapList.select(item);//select it.
 				}
 			});
-			
 			container.add(swapList, GBCUtility.createFiller(0, (2*i)+1));
 		}
 		container.revalidate();
@@ -268,7 +280,9 @@ public class AdvisingPage extends BasicPage{
 			textDifferencesPanelContainer.add(getTextDifferencesPanel(newIngredientsMap), newIngredientsPanelList);
 			
 			graphsButton.setVisible(true);
-			//TODO: add listener
+			graphsButton.addActionListener(btnEvent->{
+				MainWindow.getInstance().setPage(new StatisticsPage(replacements));
+			});
 			
 			revalidate();
 			repaint();

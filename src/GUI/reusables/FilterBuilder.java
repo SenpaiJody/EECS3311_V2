@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -44,13 +45,13 @@ public class FilterBuilder extends JPanel {
 	public Filter createFilter() {
 		Filter filter = new Filter();
 		filter.setDateRange(dateFrom.getDate(), dateTo.getDate());
-		if (select_Breakfast.isSelected())
+		if (!select_Breakfast.isSelected())
 			filter.addToExcludedTypes(new Breakfast());
-		if (select_Lunch.isSelected())
+		if (!select_Lunch.isSelected())
 			filter.addToExcludedTypes(new Lunch());
-		if (select_Dinner.isSelected())
+		if (!select_Dinner.isSelected())
 			filter.addToExcludedTypes(new Dinner());
-		if (select_Snack.isSelected())
+		if (!select_Snack.isSelected())
 			filter.addToExcludedTypes(new Snack());
 		for (PanelListItem item : includePanelList.getItems()) {
 			IngredientListItem casted = (IngredientListItem) item;
@@ -91,10 +92,10 @@ public class FilterBuilder extends JPanel {
 		foodTypePanel.add(foodTypeLabelPanel, BorderLayout.PAGE_START);
 		JPanel togglesPanel = new JPanel();
 		togglesPanel.setLayout(new GridLayout(2,2));
-		select_Breakfast = new JToggleButton("Breakfast", false);
-		select_Lunch = new JToggleButton("Lunch", false);
-		select_Dinner = new JToggleButton("Dinner", false);
-		select_Snack = new JToggleButton("Snack", false);
+		select_Breakfast = new JCheckBox("Breakfast", true);
+		select_Lunch = new JCheckBox("Lunch", true);
+		select_Dinner = new JCheckBox("Dinner", true);
+		select_Snack = new JCheckBox("Snack", true);
 		togglesPanel.add(select_Breakfast);
 		togglesPanel.add(select_Lunch);
 		togglesPanel.add(select_Dinner);

@@ -12,6 +12,7 @@ public class Main {
 
 //		INutrientService nutrientService = NutrientServiceFactory.getService();
 //		INutrientIterator iterator = nutrientService.getIterator();
+//		INutrientIterator iterator2 = nutrientService.getIterator();
 //		while (true) {
 //			
 //			//do whatever you need to do....
