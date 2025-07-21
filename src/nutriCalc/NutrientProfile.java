@@ -1,15 +1,11 @@
 /**
- * 
- */
-/**
  * @author kunjalarora
  *
  */
 package nutriCalc;
 
 import java.util.*;
-import nutrientService.INutrientService;
-import nutrientService.NutrientServiceFactory;
+
 
 /**
  * Represents a nutrition profile containing calculated nutrient values
