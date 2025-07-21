@@ -13,10 +13,10 @@ public class Main {
         // Create and add a goal
         NutritionGoal newGoal = goalManager.createGoal(
             123,           // profileId
-            208,                     // nutrientId (e.g., protein)
-            28,                     // intensity (1-100)
-            GoalType.INCREASE,     // goalType
-            4       // ingredientId
+            204,                     // nutrientId (e.g., protein)
+            62,                     // intensity (1-100)
+            GoalType.DECREASE,     // goalType
+            567       // ingredientId
         );
         
         
@@ -67,7 +67,7 @@ public class Main {
 //            2
 //        );
 //
-        goalManager.addGoal(123, newGoal2);
+//        goalManager.addGoal(123, newGoal2);
 //        System.out.println("Second goal ID: " + anotherGoal.getgoalId());
 //        System.out.println("Total goals for profile: " + 
 //                          goalManager.getActiveGoals(123).size());
