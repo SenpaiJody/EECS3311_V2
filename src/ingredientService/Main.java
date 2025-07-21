@@ -6,7 +6,7 @@ import ingredientService.IngredientServiceFactory;
 
 public class Main {
     public static void main(String[] args) {
-    	IIngredientService ingredientService = IngredientServiceFactory.getService();// Replace with your actual DB implementation
+    	IIngredientService ingredientService = IngredientServiceFactory.getService();
         
         List<Integer> ids = ingredientService.searchIngredientByName("Artichoke, canned", 1);
         System.out.println("ID: " + ids.get(0));
