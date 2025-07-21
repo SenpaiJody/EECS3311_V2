@@ -22,7 +22,7 @@ public class Main {
 //        pancakeIngredients.put(3, 2.0);
 
         Map<Integer, Double> saladIngredients = new HashMap<>();
-        saladIngredients.put(4, 200.0);
+        saladIngredients.put(5, 100.0);
 //        saladIngredients.put(5, 50.0);
 //        saladIngredients.put(6, 30.0);
 
@@ -58,11 +58,11 @@ public class Main {
         NutrientProfile saladProfile = nutritionCalc.calculateNutritionProfiles(saladIngredients);
         printNutrientProfile(saladProfile, "Salad");
 
-        // Demo 2: Calculate nutrition for Food objects
-        System.out.println("\n=== Calculate Nutrition for Food Objects ===");
-        NutrientProfile allFoodsProfile = nutritionCalc.calculateNutritionProfiles(foods);
-        printNutrientProfile(allFoodsProfile, "All Foods");
-//
+//        // Demo 2: Calculate nutrition for Food objects
+//        System.out.println("\n=== Calculate Nutrition for Food Objects ===");
+//        NutrientProfile allFoodsProfile = nutritionCalc.calculateNutritionProfiles(foods);
+//        printNutrientProfile(allFoodsProfile, "All Foods");
+////
 //        // Demo 3: Calculate nutrition from ingredient maps
 //        System.out.println("\n=== Calculate Nutrition from Ingredient Maps ===");
 //        NutrientProfile fromMaps = nutritionCalc.calculateNutritionProfilesFromMaps(ingredientsList);

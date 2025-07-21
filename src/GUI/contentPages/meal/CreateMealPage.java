@@ -1,13 +1,18 @@
 package GUI.contentPages.meal;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
+import java.awt.font.TextAttribute;
+import java.awt.geom.Rectangle2D;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +29,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.XYPlot;
 
 import GUI.DateSpinner;
 import GUI.GBCUtility;
@@ -42,6 +52,13 @@ import food.Snack;
 import foodService.FoodServiceFactory;
 import foodService.IFoodService;
 import foodService.InvalidFoodTypeException;
+import graphService.AvgGraphMode;
+import graphService.FoodDataSet;
+import graphService.FoodGroupMode;
+import graphService.GraphMode;
+import graphService.GraphServiceFactory;
+import graphService.IGraphService;
+import graphService.TotalGraphMode;
 import nutriCalc.INutriCalc;
 import nutriCalc.NutrientProfile;
 import nutriCalc.NutritionFacade;
@@ -141,14 +158,14 @@ public class CreateMealPage extends BasicPage {
 				
 		JLabel areaTitle = new JLabel("Nutrient Overview");
 		areaTitle.setFont(new Font("Arial", Font.BOLD, 16));
-		areaTitle.setBorder(new EmptyBorder(10,0,10,0));
+		//areaTitle.setBorder(new EmptyBorder(10,0,10,0));
 		nutrientsPanel.add(areaTitle,GBCUtility.createGBC(0, 0));
 		JButton refreshButton = new JButton("Refresh");
 		nutrientsPanel.add(refreshButton, GBCUtility.createGBC(0, 1));
 		
 
 		JSplitPane bottomSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		bottomSplit.setBorder(new EmptyBorder(10, 0, 0, 0));
+		//bottomSplit.setBorder(new EmptyBorder(10, 0, 0, 0));
 		bottomSplit.setDividerSize(4);
 		bottomSplit.setEnabled(false);
 		bottomSplit.setResizeWeight(0.3f);
@@ -177,7 +194,7 @@ public class CreateMealPage extends BasicPage {
 
 			Map<Integer,Double> data = getIngredientMap();
 			updateNutrientTextDisplay(nutrientTextInfo, data);
-			updateNutrientChart(nutrientChart, data);
+			updateNutrientChart(nutrientChart);
 		});
 
 	
@@ -198,11 +215,19 @@ public class CreateMealPage extends BasicPage {
 		
 		
 		nutrientTextInfo.removeAll();
+		
+		JLabel title = new JLabel("Nutrients");
+		Font font = new Font("Arial", Font.BOLD, 16);
+		Map<TextAttribute, Object> attributes = new HashMap<TextAttribute,Object>(font.getAttributes());
+		attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		title.setFont(font.deriveFont(attributes));
+		nutrientTextInfo.add(title);
+		
 		nutrients.getAllNutrients().forEach((id, amt)->{
 			String nutrientName = nutrientService.getNutrientName(id);
 			String nutrientUnit = nutrientService.getNutrientUnit(id);
 			
-			nutrientTextInfo.add(new JLabel(String.format("%s : %.2f %s", nutrientName, amt, nutrientUnit)));
+			nutrientTextInfo.add(new JLabel(String.format("   %s : %.2f %s", nutrientName, amt, nutrientUnit)));
 		});
 		
 		
@@ -210,9 +235,29 @@ public class CreateMealPage extends BasicPage {
 		nutrientTextInfo.repaint();
 	}
 	
-	private void updateNutrientChart(JPanel nutrientChartDisplay, Map<Integer,Double> data) {
+	private void updateNutrientChart(JPanel nutrientChartDisplay) {
 		nutrientChartDisplay.removeAll();
-		nutrientChartDisplay.add(new JLabel("Display nutrients chart here"));
+		//nutrientChartDisplay.add(new JLabel("Display nutrients chart here"));
+		
+		if (getIngredientMap().size() == 0)
+			return;
+		
+		FoodDataSet dataSet = new FoodDataSet("", Arrays.asList(createDummyFood(getIngredientMap())));
+		
+		IGraphService graphService = GraphServiceFactory.getService();
+		JFreeChart chart = graphService.createGraph(Arrays.asList(dataSet), new FoodGroupMode());
+		
+		ChartPanel chartPanel = new ChartPanel(chart);
+		
+		//chartPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		chart.setTitle("Food Groups");
+		
+		chart.clearSubtitles();
+
+		Dimension prefSize = new Dimension(nutrientChartDisplay.getSize().width - 10, nutrientChartDisplay.getSize().height - 10);
+		
+		chartPanel.setPreferredSize(prefSize);
+		nutrientChartDisplay.add(chartPanel);
 		nutrientChartDisplay.revalidate();
 		nutrientChartDisplay.repaint();
 	}
@@ -331,23 +376,23 @@ public class CreateMealPage extends BasicPage {
 		
 	}
 	
-	//creates a "dummy" food object without fully completed data, just for nutrient calculation
-//	private Food createDummyFood(Map<Integer, Double> ingredients) {
-//		FoodBuilder foodBuilder = new FoodBuilder();
-//		foodBuilder.setName("Dummy");
-//		foodBuilder.setDate(LocalDate.now());
-//		foodBuilder.setID(0);
-//		foodBuilder.setFoodType(new Snack());
-//		ingredients.forEach((id, amt) -> {
-//
-//			foodBuilder.addIngredient(id, amt);
-//		});
-//		try {
-//			return foodBuilder.getResult();
-//		} catch (IncompleteFoodException e) {
-//			return null;
-//		}
-//	}
+	//creates a "dummy" food object without fully completed data, used in calculations
+	private Food createDummyFood(Map<Integer, Double> ingredients) {
+		FoodBuilder foodBuilder = new FoodBuilder();
+		foodBuilder.setName("Dummy");
+		foodBuilder.setDate(LocalDate.now());
+		foodBuilder.setID(0);
+		foodBuilder.setFoodType(new Snack());
+		ingredients.forEach((id, amt) -> {
+
+			foodBuilder.addIngredient(id, amt);
+		});
+		try {
+			return foodBuilder.getResult();
+		} catch (IncompleteFoodException e) {
+			return null;
+		}
+	}
 		
 
 }
