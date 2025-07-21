@@ -62,6 +62,9 @@ public class MultiPiePlot extends Plot {
                 widthPerPlot, area.getHeight() - titleHeight
             );
 
+            g2.setFont(titleFont);
+            g2.setColor(Color.BLACK);
+            
             // Center and draw the title
             float titleX = (float)(plotArea.getCenterX() - fm.stringWidth(title) / 2.0);
             g2.drawString(title, titleX, titleY);

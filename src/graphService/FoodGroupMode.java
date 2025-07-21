@@ -40,9 +40,20 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 
 			MultiPiePlot multiPlot = new MultiPiePlot(plotsWithTitles);
 
-			LocalDate dateStart = uniqueDates.isEmpty() ? null : uniqueDates.first();
-			LocalDate dateEnd = uniqueDates.isEmpty() ? null : uniqueDates.last();
-
+			LocalDate dateStart;
+			LocalDate dateEnd;	
+			
+			if(!uniqueDates.isEmpty()) {
+				 dateStart = uniqueDates.first();
+				 dateEnd = uniqueDates.last();
+			} else {
+				IDataSet defaultDataSet =  dataSets.get(0);			
+				List<LocalDate> defaultDateList = new ArrayList<>();
+				defaultDateList = defaultDataSet.getDefaultDateList();
+				dateStart = defaultDateList.get(0);
+				dateEnd = defaultDateList.get(defaultDateList.size()-1);
+			}
+			
 		JFreeChart chart = new JFreeChart(
 				FoodGroupIntakeTitle + " " + dateStart.toString() + " to " + dateEnd.toString(),
 			    new Font("SansSerif", Font.BOLD, 18),

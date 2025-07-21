@@ -73,7 +73,7 @@ public class GUIDemoMain {
      * 
      */
 	LocalDate dateStart = LocalDate.of(2025, 6, 1);
-    LocalDate dateEnd = LocalDate.of(2025, 6, 6);
+    LocalDate dateEnd = LocalDate.of(2025, 6, 7);
     Filter filter = new Filter();
     filter.setDateRange(dateStart,dateEnd);
     List<Food> foodList = foodService.getMeals(filter);
@@ -94,11 +94,11 @@ public class GUIDemoMain {
 	FoodDataSet swapFoodDataSet = new FoodDataSet(advisedIntakeLegendLabel, swapFoodList);
 
 	String CFGRecommendationLegendLabel = "CFG Adequate Intake";
-	CFGDataSet cfgDataSet = new CFGDataSet(CFGRecommendationLegendLabel, userService.getCurrentProfile());
+	CFGDataSet cfgDataSet = new CFGDataSet(CFGRecommendationLegendLabel, userService.getCurrentProfile(),dateStart,dateEnd);
 
 	List<IDataSet> data = new ArrayList<>();
-	data.add(foodDataSet);
-	data.add(swapFoodDataSet);
+//	data.add(foodDataSet);
+//	data.add(swapFoodDataSet);
 	data.add(cfgDataSet);
 	
 

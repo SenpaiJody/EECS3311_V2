@@ -20,5 +20,8 @@ public interface IDataSet {
 	public Map<Integer, Double> getAvgNutrientAmounts();
 
 	public Map<Integer, Double> getTotalNutrientAmounts(int distinctDaysCount);
+	
+	public List<LocalDate> getDefaultDateList();
+
 
 }
