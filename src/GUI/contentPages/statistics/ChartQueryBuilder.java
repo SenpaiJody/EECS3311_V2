@@ -315,7 +315,7 @@ public class ChartQueryBuilder extends JPanel {
 					return null;
 				}
 				IUserService userSrv = UserServiceFactory.getService();
-				return new CFGDataSet("Canada Food Guide",userSrv.getCurrentProfile());
+				return new CFGDataSet("Canada Food Guide",userSrv.getCurrentProfile(), dateFrom.getDate(), dateTo.getDate());
 			}
 		};
 		checkBox.addItemListener(item->{
