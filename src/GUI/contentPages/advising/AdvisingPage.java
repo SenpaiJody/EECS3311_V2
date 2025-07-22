@@ -16,10 +16,13 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 
 import GUI.GBCUtility;
+import GUI.MainWindow;
 import GUI.contentPages.BasicPage;
+import GUI.contentPages.statistics.StatisticsPage;
 import GUI.reusables.IngredientListItem;
 import GUI.reusables.IngredientQuantityListItem;
 import GUI.reusables.PanelList;
@@ -49,41 +52,45 @@ public class AdvisingPage extends BasicPage{
 	private Food originalFood;
 	
 
-	
+	//number of active goals
 	private int nGoals = 0;
+	//list of all goal forms
 	private List<GoalForm> goalForms = new ArrayList<GoalForm>();
 	
+	//listeners that activate whenever the selected swap is changed
 	private List<ActionListener> swapListeners = new ArrayList<ActionListener>();
+	//a map of old ingredients to new ingredients
 	private Map<Integer, Integer> replacements = new HashMap<Integer, Integer>();
 	
-	private IFoodRecommendation recommendationManager = new FoodRecommendation();
-	private INutritionGoalManager goalManager = new NutritionGoalManager();
 	
+
 	
+	//constructor
 	public AdvisingPage(Food originalFood){
 		setSubtitle("Advising");
 		
 		this.originalFood = originalFood;
-		goalManager.addGoalChangeListener(recommendationManager);
-
-	
 		
 
 		getInnerPanel().setLayout(new GridBagLayout());
 		
-		//getInnerPanel().add(createIngredientDisplayPanel(),  GBCUtility.createFiller(0, 0));
+		JSplitPane outerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		JSplitPane innerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		outerSplitPane.setTopComponent(createGoalCreationPanel());
+		innerSplitPane.setTopComponent(createSwapRecommendationPanel());
+		innerSplitPane.setBottomComponent(createDifferenceViewerPanel());
+		outerSplitPane.setBottomComponent(innerSplitPane);
 		
+		outerSplitPane.setEnabled(false);
+		outerSplitPane.setResizeWeight(0);
+		innerSplitPane.setEnabled(false);
+		innerSplitPane.setResizeWeight(0.5);
 		
-		getInnerPanel().add(createGoalCreationPanel(), GBCUtility.createFiller(0,0));
-		getInnerPanel().add(createSwapRecommendationPanel(), GBCUtility.createFiller(1,0));
-
-		getInnerPanel().add(createDifferenceViewerPanel(), GBCUtility.createFiller(2, 0));
-		//getInnerPanel().add(Box.createHorizontalStrut(500),GBCUtility.createFiller(2, 0));
-		
+		getInnerPanel().add(outerSplitPane, GBCUtility.createFiller(0, 0));
 	}
 	
 
-	
+	//creates a numbered title of a section of the page
 	private JPanel createSectionTitle(int number, String title) {
 		JPanel panel = new JPanel();
 		JLabel numberLabel = new JLabel(String.format("%d) ", number));
@@ -97,10 +104,11 @@ public class AdvisingPage extends BasicPage{
 	}
 	
 	
+	//The section of the page that prompts the user for goals
 	private JPanel createGoalCreationPanel() {
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new GridBagLayout());
 		panel.add(createSectionTitle(1, "Define your goals"), GBCUtility.createGBC(0, 0));
 		
@@ -161,10 +169,12 @@ public class AdvisingPage extends BasicPage{
 		}
 	}
 
+	//section of the page that displays swaps and has the user pick one
 	private JPanel createSwapRecommendationPanel() {
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
+		//panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new GridBagLayout());
 		panel.add(createSectionTitle(2,"Select a Swap"), GBCUtility.createGBC(0, 0));
 		JButton loadRecommendationsBtn = new JButton("Load Recommendations");
@@ -180,7 +190,12 @@ public class AdvisingPage extends BasicPage{
 		return panel;
 	}
 	
+	//populate the swapRecommendation panel with lists of ingredients
 	private void loadSwaps(JPanel container) {
+		IFoodRecommendation recommendationManager = new FoodRecommendation();
+		INutritionGoalManager goalManager = new NutritionGoalManager();
+		goalManager.addGoalChangeListener(recommendationManager);
+		
 		container.removeAll();
 		container.revalidate();
 		container.repaint();
@@ -197,7 +212,7 @@ public class AdvisingPage extends BasicPage{
 		//this method returns a list of lists of recommendations, returning two elements if the goals are on different ingredients, or one if it is the same ingredient
 		List<List<Integer>> recommendations = recommendationManager.getLatestRecommendations(profileID);
 		
-		//HashMap<Integer, Integer> swaps = new HashMap<Integer,Integer>();
+
 		replacements = new HashMap<Integer,Integer>();
 		for (int i =0; i < recommendations.size(); i++) {
 			SelectablePanelList swapList = new SelectablePanelList(225,0);
@@ -219,7 +234,6 @@ public class AdvisingPage extends BasicPage{
 					swapList.select(item);//select it.
 				}
 			});
-			
 			container.add(swapList, GBCUtility.createFiller(0, (2*i)+1));
 		}
 		container.revalidate();
@@ -227,7 +241,7 @@ public class AdvisingPage extends BasicPage{
 	}
 
 
-
+	//panel responsible for showing the difference in ingredients and nutrients (in text format)
 	private JPanel createDifferenceViewerPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -266,7 +280,9 @@ public class AdvisingPage extends BasicPage{
 			textDifferencesPanelContainer.add(getTextDifferencesPanel(newIngredientsMap), newIngredientsPanelList);
 			
 			graphsButton.setVisible(true);
-			//TODO: add listener
+			graphsButton.addActionListener(btnEvent->{
+				MainWindow.getInstance().setPage(new StatisticsPage(replacements));
+			});
 			
 			revalidate();
 			repaint();
@@ -292,6 +308,8 @@ public class AdvisingPage extends BasicPage{
 		panel.add(graphsBtnContainer, graphsBtnContainerGBC);
 		return panel;
 	}
+	
+	//highlights an ingredient that was changed by the swap with a RED border
 	private void highlightChangedIngredients(PanelList list) {
 		list.getItems().forEach(item->{
 			item.setBorder(
@@ -300,6 +318,8 @@ public class AdvisingPage extends BasicPage{
 					);
 		});
 	}
+	
+	//populates a PanelList with ingredients, new ingredients are given a GREEN border
 	private void populateNewIngredientsList(PanelList list, Map<Integer, Double> newIngredientMap) {
 		list.removeAllItems();
 		newIngredientMap.forEach((id,amt)->{
@@ -316,6 +336,7 @@ public class AdvisingPage extends BasicPage{
 		list.repaint();
 	}
 	
+	//sub-panel for displaying specifically the differences in nutrients, with arrows for changes
 	private JPanel getTextDifferencesPanel(Map<Integer,Double> newIngredientMap) {
 		
 		INutrientService nutrientSrv = NutrientServiceFactory.getService();

@@ -14,6 +14,7 @@ import GUI.MainWindow;
 import GUI.contentPages.homepage.HomePage;
 import GUI.contentPages.meal.CreateMealPage;
 import GUI.contentPages.meal.MealHistoryPage;
+import GUI.contentPages.statistics.StatisticsPage;
 import GUI.profile.ProfilePage;
 
 //The navigation bar that exists on any page of the GUI
@@ -28,8 +29,8 @@ public class NavBar extends JPanel {
 	private JButton addMealBtn;
 	public JButton getaddMealButton() {return addMealBtn;}
 	
-	private JButton CFGBtn;
-	public JButton getCFGButton() {return CFGBtn;}
+	private JButton statsBtn;
+	public JButton getStatsButton() {return statsBtn;}
 	
 	
 	private JButton profileBtn;
@@ -45,7 +46,7 @@ public class NavBar extends JPanel {
 		});
 		
 		
-		historyBtn = addBtn("History");
+		historyBtn = addBtn("Meal History");
 		historyBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new MealHistoryPage());
 		});
@@ -53,7 +54,10 @@ public class NavBar extends JPanel {
 		addMealBtn.addActionListener(event->{
 			MainWindow.getInstance().setPage(new CreateMealPage());
 		});
-		CFGBtn = addBtn("Canada Food Guide");
+		statsBtn = addBtn("Graphs & Comparisons");
+		statsBtn.addActionListener(event->{
+			MainWindow.getInstance().setPage(new StatisticsPage());
+		});
 		
 		
 		

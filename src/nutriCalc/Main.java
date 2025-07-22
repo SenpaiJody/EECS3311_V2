@@ -173,7 +173,30 @@ public class Main {
 //        
 //        
 //        
+//        // Demo 3: Calculate nutrition from ingredient maps
+//        System.out.println("\n=== Calculate Nutrition from Ingredient Maps ===");
+//        NutrientProfile fromMaps = nutritionCalc.calculateNutritionProfilesFromMaps(ingredientsList);
+//        printNutrientProfile(fromMaps, "From Maps");
+
+        // Demo 4: Combine nutrition profiles
+        System.out.println("\n=== Combine Nutrition Profiles ===");
+        List<NutrientProfile> profiles = new ArrayList<>();
+        profiles.add(pancakeProfile);
+        profiles.add(saladProfile);
         
+        NutrientProfile combinedProfile = nutritionCalc.combineNutritionProfiles(profiles);
+        printNutrientProfile(combinedProfile, "Combined");
+
+        // Demo 5: Calculate nutrient differences
+        System.out.println("\n=== Calculate Nutrient Differences ===");
+        List<Food> pancakeList = Arrays.asList(foods.get(0));
+        List<Food> saladList = Arrays.asList(foods.get(1));
+        
+        Map<Integer, Double> differences = nutritionCalc.calculateNutrientDifference(pancakeList, saladList);
+        System.out.println("Differences (Pancakes - Salad):");
+        for (Map.Entry<Integer, Double> entry : differences.entrySet()) {
+            System.out.println("  Nutrient " + entry.getKey() + ": " + entry.getValue());
+        }
 //
 //        // Demo 6: Create ideal ingredient
 //        System.out.println("\n=== Create Ideal Ingredient ===");

@@ -44,7 +44,6 @@ class GoalForm extends JPanel{
 	//cache of ingredients in the food with their name
 	private Map<Integer,String> ingredients = new HashMap<Integer, String>();
 	
-	private Food food;
 	
 	private static final Font goalTextFont = new Font("Arial", Font.PLAIN, 14);
 	private static final Font goalTextFont_mono = new Font("Monospaced", Font.PLAIN, 14);
@@ -216,7 +215,7 @@ class GoalForm extends JPanel{
 		
 		int nutrient = getSelectedNutrient();
 		
-		int intensity = intensitySlider.getValue();
+		int intensity = Math.abs(intensitySlider.getValue());
 		
 		GoalType type = intensitySlider.getValue() > 0 ? GoalType.INCREASE : GoalType.DECREASE;
 

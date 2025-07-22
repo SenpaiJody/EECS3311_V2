@@ -20,7 +20,9 @@ public class Main {
             62,                     // intensity (1-100)
             GoalType.DECREASE,     // goalType
             567       // ingredientId
+
         );
+       
         
         
         NutritionGoal newGoal2 = goalManager.createGoal(
