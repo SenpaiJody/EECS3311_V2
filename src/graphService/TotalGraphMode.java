@@ -2,6 +2,7 @@ package graphService;
 
 import java.awt.Font;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,9 @@ public class TotalGraphMode extends GraphMode implements IGraphMode, BarGraph{
 	            List<Food> foodList = inidvidualSet.getFoodList();
 	            addDates(foodList);
 	        }
-
+	    
+	    if (uniqueDates.isEmpty()) {populateDefaultDates(dataSets);	}
+	    
 	    int distinctDaysCount = uniqueDates.size();
 
 		for (IDataSet individualSet : dataSets) {
@@ -40,8 +43,19 @@ public class TotalGraphMode extends GraphMode implements IGraphMode, BarGraph{
 			}
 		}
 
-		LocalDate dateStart = uniqueDates.isEmpty() ? null : uniqueDates.first();
-		LocalDate dateEnd = uniqueDates.isEmpty() ? null : uniqueDates.last();
+		LocalDate dateStart;
+		LocalDate dateEnd;	
+		
+		if(!uniqueDates.isEmpty()) {
+			 dateStart = uniqueDates.first();
+			 dateEnd = uniqueDates.last();
+		} else {
+			IDataSet defaultDataSet =  dataSets.get(0);			
+			List<LocalDate> defaultDateList = new ArrayList<>();
+			defaultDateList = defaultDataSet.getDefaultDateList();
+			dateStart = defaultDateList.get(0);
+			dateEnd = defaultDateList.get(defaultDateList.size()-1);
+		}
 
 		JFreeChart chart = formatBarGraph(dataset,totalIntakeTitle,dateStart,dateEnd);
 
