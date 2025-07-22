@@ -269,7 +269,7 @@ public class Main {
         
         
         System.out.println("\n=== Final Summary - All Recommendations2 ===");
-        List<List<Integer>> finalRecs2 = new ArrayList<>();
+        List<List<Integer>> finalRecs21 = new ArrayList<>();
 
         try {
             finalRecs = recommendationSystem.getLatestRecommendations(124);
