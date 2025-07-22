@@ -136,7 +136,9 @@ public class GUIDemoMain {
 
     	JFrame frame = new JFrame("Chart");
     	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    	frame.add(new ChartPanel(chart));
+    	ChartPanel cp = new ChartPanel(null);
+    	cp.setChart(chart);
+    	frame.add(cp);
     	frame.pack();
     	frame.setLocationRelativeTo(null); // center it
     	frame.setVisible(true);

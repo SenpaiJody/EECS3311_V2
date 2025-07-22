@@ -1,5 +1,6 @@
 package ingredientService;
 import java.util.List;
+import recommendation.GoalType;
 import java.util.Map;
 
 /**An Interface describing all the services that has to do with ingredients (i.e.,the pieces that make up a meal or snack*/
@@ -41,7 +42,11 @@ public interface IIngredientService {
 	 * 
 	 * @return A list of ingredientIDs that best match the nutrient amounts provided.
 	 * */
-	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> nutrients, int maxResults);
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID, GoalType type);
+	
+	
+	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults,List <Integer> nutrientID, List <GoalType> type);
+	
 	
 	
 	/**Gets the food group ID of the provided ingredient

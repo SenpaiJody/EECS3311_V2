@@ -6,7 +6,9 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +20,11 @@ import GUI.reusables.IngredientQuantityListItem;
 import GUI.reusables.PanelList;
 import GUI.reusables.PanelListItem;
 import food.Food;
+import ingredientService.IIngredientService;
+import nutriCalc.INutriCalc;
+import nutriCalc.NutritionFacade;
+import nutrientService.INutrientService;
+import nutrientService.NutrientServiceFactory;
 
 
 //A PanelListItem that displays a Meal/Food
@@ -27,7 +34,18 @@ public class MealListItem extends PanelListItem implements MouseListener{
 	
 	JPanel detailsPanel;
 	JLabel expansionLabel;
+	Food food;
+	
+	public Food getFood() {return food;}
+	public JPanel getDetailsPanel() {
+		if (detailsPanel == null)
+			generateDetailsPanel();
+		return detailsPanel;
+	}
+	
 	public MealListItem(Food food) {
+		
+		this.food = food;
 		addMouseListener(this);
 		
 		
@@ -52,6 +70,24 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		add(expansionLabel, GBCUtility.createGBC(3,0,1,2));
 		
 		
+
+	}
+	
+	public boolean getExpanded() {return expanded;}
+	public void setExpanded(boolean expanded) {
+		if (this.expanded == expanded) 
+			return;
+		
+		if (expanded == true && detailsPanel == null) {
+			generateDetailsPanel();
+		}
+		detailsPanel.setVisible(expanded);
+		expansionLabel.setText(!expanded ? "[Click to Expand]  " : "[Click to Retract]  ");
+		this.expanded = expanded;
+	}
+
+	
+	private void generateDetailsPanel() {
 		detailsPanel = new JPanel();
 		detailsPanel.setOpaque(false);
 		detailsPanel.setVisible(false);
@@ -61,9 +97,12 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		detailsPanel.add(new JLabel("Ingredients"), GBCUtility.createGBC(0, 0));
 		
 		PanelList ingredientsList = new PanelList(300, 300);
-		detailsPanel.add(ingredientsList, GBCUtility.createGBC(0, 1));
+		detailsPanel.add(ingredientsList, GBCUtility.createFiller(0, 1));
 		
-		detailsPanel.add(Box.createHorizontalGlue(), GBCUtility.createFiller(1, 0));
+		detailsPanel.add(new JLabel("Nutrients"), GBCUtility.createGBC(1, 0));
+
+		
+		detailsPanel.add(createNutrientsPanel(), GBCUtility.createFiller(1, 1));
 		
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new GridBagLayout());
@@ -81,7 +120,7 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		graphsButtonGBC.weightx = 1;
 		
 		buttonsPanel.add(replaceButton,replaceButtonGBC);
-		buttonsPanel.add(graphsButton,graphsButtonGBC);
+		//buttonsPanel.add(graphsButton,graphsButtonGBC);
 		
 		
 		var buttonsPanelGBC = GBCUtility.createGBC(2, 0,1,2);
@@ -105,15 +144,25 @@ public class MealListItem extends PanelListItem implements MouseListener{
 		});
 	}
 	
-	public boolean getExpanded() {return expanded;}
-	public void setExpanded(boolean expanded) {
-		detailsPanel.setVisible(expanded);
-		expansionLabel.setText(!expanded ? "[Click to Expand]  " : "[Click to Retract]  ");
-		this.expanded = expanded;
+	
+	private JPanel createNutrientsPanel() {
+		JPanel nutrientsPanel = new JPanel();
+		nutrientsPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+		nutrientsPanel.setLayout(new GridBagLayout());
+		INutrientService srv = NutrientServiceFactory.getService();
+		INutriCalc calculator = new NutritionFacade();
+		
+		var nutrients = calculator.calculateNutritionProfiles(food.getIngredients()).getAllNutrients();
+		var allNutrientIDs = srv.getAllNutrientIDs();
+		for (int i =0 ; i <allNutrientIDs.size(); i++) {
+			int nutrientID = allNutrientIDs.get(i);
+			JLabel nutrientTitle = new JLabel(String.format("%s :", srv.getNutrientName(nutrientID)));
+			JLabel nutrientAmt = new JLabel(String.format(" %.2f%s", nutrients.get(nutrientID), srv.getNutrientUnit(nutrientID)));
+			nutrientsPanel.add(nutrientTitle,GBCUtility.createGBC(0, i));
+			nutrientsPanel.add(nutrientAmt,GBCUtility.createGBC(1, i));
+		}
+		return nutrientsPanel;
 	}
-
-	
-	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}

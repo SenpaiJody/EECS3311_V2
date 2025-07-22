@@ -13,6 +13,7 @@ import food.Food;
 import nutrientService.INutrientService;
 import nutrientService.NutrientServiceFactory;
 import recommendation.NutritionGoal;
+import recommendation.NutritionGoalManager;
 
 
 /**
@@ -322,7 +323,7 @@ public class NutritionFacade implements INutriCalc {
         if (goals == null || goals.isEmpty()) {
             return new ArrayList<>();
         }
-        
+
         // Group goals by ingredient ID
         Map<Integer, List<NutritionGoal>> goalsByIngredient = new HashMap<>();
         for (NutritionGoal goal : goals) {
@@ -330,40 +331,41 @@ public class NutritionFacade implements INutriCalc {
                 goalsByIngredient.computeIfAbsent(goal.getingredientId(), k -> new ArrayList<>()).add(goal);
             }
         }
-        
+
         if (goalsByIngredient.isEmpty()) {
             return new ArrayList<>();
         }
-        
+
         // Get nutrition data for all ingredients
         List<Integer> ingredientIds = new ArrayList<>(goalsByIngredient.keySet());
-        Map<Integer, Map<Integer, Double>> nutritionDataPer100g = 
-            nutrientService.getNutrientsListPer100g(ingredientIds);
-        
+        Map<Integer, Map<Integer, Double>> nutritionDataPer100g =
+                nutrientService.getNutrientsListPer100g(ingredientIds);
+
         List<NutrientProfile> profiles = new ArrayList<>();
-        
+
         // Process each ingredient group
         for (Map.Entry<Integer, List<NutritionGoal>> entry : goalsByIngredient.entrySet()) {
             Integer ingredientId = entry.getKey();
             List<NutritionGoal> ingredientGoals = entry.getValue();
-            
+
             // Group goals by nutrient ID to handle same nutrient modifications
             Map<Integer, Integer> nutrientIntensities = new HashMap<>();
             for (NutritionGoal goal : ingredientGoals) {
                 Integer nutrientId = goal.getnutrientId();
+                int signedIntensity = goal.applyGoalTypeSign();
                 // Add intensities for same nutrient (handles same ingredient + same nutrient case)
-                nutrientIntensities.merge(nutrientId, goal.getintensity(), Integer::sum);
+                nutrientIntensities.merge(nutrientId, signedIntensity, Integer::sum);
             }
-            
+
             // Use the modified calculationService method with multiple nutrients
             NutrientProfile ingredientProfile = calculationService.createIdealIngredientProfile(
-                ingredientId, nutrientIntensities, nutritionDataPer100g);
-            
+                    ingredientId, nutrientIntensities, nutritionDataPer100g);
+
             if (ingredientProfile != null) {
                 profiles.add(ingredientProfile);
             }
         }
-        
+
         return profiles;
     }
 

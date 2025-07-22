@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nutrientService.INutrientIterator;
 import nutrientService.INutrientService;
 
 
@@ -27,7 +28,6 @@ public class CSVNutrientDB implements INutrientService {
 			retval.put(i, new HashMap<Integer,Double>());
 		}
 		
-		
 		try (BufferedReader br = new BufferedReader(new FileReader(nutrient_amount_csv))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
@@ -37,10 +37,12 @@ public class CSVNutrientDB implements INutrientService {
 					Integer nutrient_id = Integer.parseInt(elements[1]);
 					Double nutrient_quantity = Double.parseDouble(elements[2]);
 					if(nutrient_quantity > 0) {
-						if (retval.get(ingredient_id).containsKey(nutrient_id))
-							retval.get(ingredient_id).replace(nutrient_id, retval.get(ingredient_id).get(nutrient_id) + nutrient_quantity);
+						var ingredients = retval.get(ingredient_id);
+						
+						if (ingredients.containsKey(nutrient_id))
+							ingredients.replace(nutrient_id, ingredients.get(nutrient_id) + nutrient_quantity);
 						else
-							retval.get(ingredient_id).put(nutrient_id, nutrient_quantity);
+							ingredients.put(nutrient_id, nutrient_quantity);
 					}
 				}
 		    }
@@ -48,8 +50,7 @@ public class CSVNutrientDB implements INutrientService {
 		}
 		catch(IOException e) {
 			throw new RuntimeException(nutrient_amount_csv + " not found.");
-		}
-		
+		};
 		return retval;
 	}
 	
@@ -159,4 +160,11 @@ public class CSVNutrientDB implements INutrientService {
 		return ids;
 	}
 
+	/** {@inheritDoc}
+	 * 	<p>Uses a {@link CSVNutrientIterator}
+	 * */
+	@Override
+	public INutrientIterator getIterator() {
+		return new CSVNutrientIterator(nutrient_amount_csv);
+	}
 }

@@ -47,4 +47,9 @@ public interface INutrientService {
 	 * @returns a list of all nutrient IDs
 	 * */
 	public List<Integer> getAllNutrientIDs();
+	
+	/** Get an iterator that lets the user loop through all nutrient profiles
+	 * @return an {@link INutrientIterator}
+	 * */
+	public INutrientIterator getIterator();
 }
