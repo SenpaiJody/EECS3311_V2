@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.general.DefaultPieDataset;
-
 import food.Food;
+import org.jfree.chart.labels.StandardPieToolTipGenerator;
 
 public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 
@@ -77,11 +79,31 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public PiePlot formatPiePlot(DefaultPieDataset dataset) {
 	    Font labelFont = new Font("SansSerif", Font.PLAIN, 10);
-
+    
 	    PiePlot plot = new PiePlot(dataset);
 	    plot.setLabelFont(labelFont);
 	    plot.setInteriorGap(0.04);
 	    plot.setBackgroundPaint(Color.WHITE);
+	    
+	    plot.setToolTipGenerator(new StandardPieToolTipGenerator("{0}: {1} ({2})"));
+	    
+	    // Display percentages
+	    
+	    
+	    plot.setLabelGenerator(new FirstWordPercentageLabelGenerator());
+	    plot.setSimpleLabels(true);
+	    plot.setInteriorGap(0.1);
+	    plot.setLabelGap(0.05);
+	    plot.setSimpleLabelOffset(new RectangleInsets(5, 15, 5, 15));
+	    plot.setLabelLinkMargin(0.2);
+	    plot.setLabelLinksVisible(true);
+	    plot.setLabelLinkPaint(Color.GRAY);
+	    plot.setLabelFont(new Font("SansSerif", Font.BOLD, 8));
+	    
+	    // setting the gap btw label and edge of pie graph
+	    plot.setLabelGap(0.00);
+	    plot.setSimpleLabelOffset(new RectangleInsets(2, 10, 2, 10)); 
+	    plot.setLabelLinkMargin(0.1);
 
 	    return plot;
 	}
