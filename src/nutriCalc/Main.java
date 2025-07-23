@@ -28,7 +28,7 @@ public class Main {
 //        pancakeIngredients.put(3, 2.0);
 
         Map<Integer, Double> saladIngredients = new HashMap<>();
-        saladIngredients.put(733, 100.0);
+        saladIngredients.put(2951, 100.0);
 //        saladIngredients.put(5, 50.0);
 //        saladIngredients.put(6, 30.0);
 
