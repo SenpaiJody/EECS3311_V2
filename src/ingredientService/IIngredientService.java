@@ -36,7 +36,8 @@ public interface IIngredientService {
 	public List<String> getIngredientNames(List<Integer> ingredientIDs);
 	
 	
-	/**Gets up to 'maxResult' ingredients that best match the nutrient amounts provided.
+	/**Gets up to 'maxResult' ingredients that best match the nutrient amounts provided, prioritizing some specific nutrientID and goal type. 
+	 * <p> TODO: this function is going to be changed soon (deliverable 3)
 	 * @param nutrients - A Map of IDs and Quantities of nutrients
 	 * @param maxResults - the maximum number of results to return
 	 * 
@@ -45,6 +46,13 @@ public interface IIngredientService {
 	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults, Integer nutrientID, GoalType type);
 	
 	
+	/**Gets up to 'maxResult' ingredients that best match the nutrient amounts provided, prioritizing some specific nutrientID and goal type. 
+	 * <p> TODO: this function is going to be changed soon (deliverable 3)
+	 * @param nutrients - A Map of IDs and Quantities of nutrients
+	 * @param maxResults - the maximum number of results to return
+	 * 
+	 * @return A list of ingredientIDs that best match the nutrient amounts provided.
+	 * */
 	public List<Integer> getIngredientMatchingNutrients(Map<Integer, Double> target, int maxResults,List <Integer> nutrientID, List <GoalType> type);
 	
 	
