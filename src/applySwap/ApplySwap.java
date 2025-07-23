@@ -8,10 +8,20 @@ import java.util.Map;
 import food.Food;
 
 /**
- * Implementation of ingredient swapping logic
+ * Implementation of ingredient swapping logic.
+ * Replaces old ingredients with new ones in food items.
  */
 class ApplySwap implements IApplySwap {
     
+    /**
+     * Applies ingredient swaps to a list of foods.
+     * Each old ingredient is replaced with a new ingredient, keeping the same quantity.
+     * 
+     * @param newIngredients List of new ingredient IDs to use
+     * @param oldIngredients List of old ingredient IDs to replace
+     * @param previousFoods List of foods to modify
+     * @return New list of foods with ingredients swapped
+     */
     @Override
     public List<Food> applySwaps(List<Integer> newIngredients, 
                                 List<Integer> oldIngredients, 
@@ -71,7 +81,11 @@ class ApplySwap implements IApplySwap {
     }
     
     /**
-     * Creates a deep copy of the foods list to avoid modifying the original
+     * Creates a deep copy of the foods list.
+     * This prevents changes from affecting the original food objects.
+     * 
+     * @param foods Original list of foods to copy
+     * @return New list with copied food objects
      */
     private List<Food> deepCopyFoods(List<Food> foods) {
         List<Food> copy = new ArrayList<>();
