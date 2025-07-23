@@ -5,7 +5,7 @@ import java.util.*;
 public class NutritionGoalManager implements INutritionGoalManager {
 	private List<NutritionGoal> activeGoals;
     private final int maxGoalsPerUser = 2;
-    private List<GoalChangeListener> listeners;
+    private List<IGoalChangeListener> listeners;
 
     
    
@@ -20,25 +20,25 @@ public class NutritionGoalManager implements INutritionGoalManager {
 
     
     @Override
-    public void addGoalChangeListener(GoalChangeListener listener) {
+    public void addGoalChangeListener(IGoalChangeListener listener) {
         listeners.add(listener);
-        System.out.println("[INFO] Goal change listener added: " + listener.getClass().getSimpleName());
+//        System.out.println("[INFO] Goal change listener added: " + listener.getClass().getSimpleName());
     }
     
     @Override
-    public void removeGoalChangeListener(GoalChangeListener listener) {
+    public void removeGoalChangeListener(IGoalChangeListener listener) {
         listeners.remove(listener);
-        System.out.println("[INFO] Goal change listener removed: " + listener.getClass().getSimpleName());
+//        System.out.println("[INFO] Goal change listener removed: " + listener.getClass().getSimpleName());
     }
     
     @Override
     public void notifyGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals) {
-        System.out.println("[INFO] Notifying " + listeners.size() + " listeners of goal change for profile " + profileId);
-        for (GoalChangeListener listener : listeners) {
+//        System.out.println("[INFO] Notifying " + listeners.size() + " listeners of goal change for profile " + profileId);
+        for (IGoalChangeListener listener : listeners) {
             try {
                 listener.onGoalChanged(profileId, updatedGoals);
             } catch (Exception e) {
-                System.err.println("[ERROR] Error notifying listener: " + e.getMessage());
+//                System.err.println("[ERROR] Error notifying listener: " + e.getMessage());
             }
         }
     }
@@ -75,7 +75,7 @@ public class NutritionGoalManager implements INutritionGoalManager {
         
         boolean removed = activeGoals.size() < initialSize;
         if (removed) {
-            System.out.println("[INFO] Removed goal " + goalId + " from profile " + profileId);
+//            System.out.println("[INFO] Removed goal " + goalId + " from profile " + profileId);
             // ADDED: Notify observers
             notifyGoalChanged(profileId, getActiveGoals(profileId));
         }
@@ -99,20 +99,7 @@ public class NutritionGoalManager implements INutritionGoalManager {
         return userGoalCount < maxGoalsPerUser;
     }
 
-//    @Override
-//    public void validateInputs(Integer nutrientId, int intensity, Integer ingredientId) {
-//        if (nutrientId <= 0) {
-//            throw new IllegalArgumentException("Nutrient ID must be a positive integer");
-//        }
-//
-//        if (intensity < 1 || intensity > 10) {
-//            throw new IllegalArgumentException("Intensity must be between 1 and 10");
-//        }
-//
-//        if (ingredientId == null || ingredientId.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Ingredient ID cannot be empty");
-//        }
-//    }
+
 
     // Getter for maxGoalsPerUser (if needed for testing/debugging)
     public int getMaxGoalsPerUser() {

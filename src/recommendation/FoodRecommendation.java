@@ -19,7 +19,6 @@ public class FoodRecommendation implements IFoodRecommendation{
     private IIngredientService ingredientService = IngredientServiceFactory.getService();
     
     private Map<Integer, Map<Integer, Integer>> ingredientIndexMap = new HashMap<>();
-    private Map<Integer, Map<Integer, List<NutritionGoal>>> goalsByProfile = new HashMap<>();
     
     private Map<Integer, List<List<Integer>>> latestRecommendations = new HashMap<>();
     
@@ -28,8 +27,8 @@ public class FoodRecommendation implements IFoodRecommendation{
     @Override
     public void onGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals) {
 
-        System.out.println("\n[INFO] Goals updated for profile " + profileId);
-        System.out.println("[INFO] Number of updated goals: " + updatedGoals.size());
+//        System.out.println("\n[INFO] Goals updated for profile " + profileId);
+//        System.out.println("[INFO] Number of updated goals: " + updatedGoals.size());
         
 
         if (updatedGoals.isEmpty()) {
@@ -79,26 +78,26 @@ public class FoodRecommendation implements IFoodRecommendation{
     
     // Method to handle multiple goals
     private List<List<Integer>> getRecommendations(List<NutritionGoal> goals, int limit) {
-        System.out.println("=== DEBUG: Starting getRecommendations with " + goals.size() + " goals ===");
+//        System.out.println("=== DEBUG: Starting getRecommendations with " + goals.size() + " goals ===");
         
         try {
             // 1. Create ideal nutrient profiles for all goals
-            System.out.println("\n--- Step 1: Creating ideal nutrient profiles ---");
+//            System.out.println("\n--- Step 1: Creating ideal nutrient profiles ---");
             List<NutrientProfile> idealProfiles = nutritionCalculator.createIdealIngredient(goals);
-            System.out.println("Number of ideal profiles created: " + idealProfiles.size());
+//            System.out.println("Number of ideal profiles created: " + idealProfiles.size());
             
             if (idealProfiles.isEmpty()) {
-                System.out.println("ERROR: No ideal profiles created!");
+//                System.out.println("ERROR: No ideal profiles created!");
                 return new ArrayList<>();
             }
             
             // 2. Determine strategy based on number of ideal profiles
-            System.out.println("\n--- Step 2: Determining matching strategy based on profile count ---");
+//            System.out.println("\n--- Step 2: Determining matching strategy based on profile count ---");
             List<List<Integer>> allRecommendations = new ArrayList<>();
             
             if (idealProfiles.size() == 1) {
                 // Single profile strategy: Use all nutrient IDs and goal types together
-                System.out.println("Single profile detected - using combined nutrient IDs and goal types");
+//                System.out.println("Single profile detected - using combined nutrient IDs and goal types");
                 
                 List<Integer> allNutrientIds = goals.stream()
                     .map(NutritionGoal::getnutrientId)
@@ -107,8 +106,8 @@ public class FoodRecommendation implements IFoodRecommendation{
                     .map(NutritionGoal::getgoalType)
                     .collect(Collectors.toList());
                 
-                System.out.println("All nutrient IDs: " + allNutrientIds);
-                System.out.println("All goal types: " + allGoalTypes);
+//                System.out.println("All nutrient IDs: " + allNutrientIds);
+//                System.out.println("All goal types: " + allGoalTypes);
                 
                 NutrientProfile profile = idealProfiles.get(0);
                 NutritionGoal firstGoal = goals.get(0);
@@ -120,7 +119,7 @@ public class FoodRecommendation implements IFoodRecommendation{
                     allGoalTypes    // Pass all goal types as list
                 );
                 
-                System.out.println("Found " + matchingIngredients.size() + " matching ingredients for single profile");
+//                System.out.println("Found " + matchingIngredients.size() + " matching ingredients for single profile");
                 
                 // Score and process for single profile
                 List<ScoredIngredient> scoredIngredientsForProfile = new ArrayList<>();
@@ -133,11 +132,11 @@ public class FoodRecommendation implements IFoodRecommendation{
                     int ingredientFoodGroup = ingredientService.getFoodGroup(ingredientId);
                     if (ingredientFoodGroup == goalFoodGroup) {
                         score += FOOD_GROUP_BONUS;
-                        System.out.println("  Ingredient " + ingredientId + " gets food group bonus (group: " + ingredientFoodGroup + ")");
+//                        System.out.println("  Ingredient " + ingredientId + " gets food group bonus (group: " + ingredientFoodGroup + ")");
                     }
                     
                     scoredIngredientsForProfile.add(new ScoredIngredient(ingredientId, score));
-                    System.out.println("  Ingredient " + ingredientId + " scored: " + score);
+//                    System.out.println("  Ingredient " + ingredientId + " scored: " + score);
                 }
                 
                 List<Integer> profileRecommendations = scoredIngredientsForProfile.stream()
@@ -147,17 +146,17 @@ public class FoodRecommendation implements IFoodRecommendation{
                     .collect(Collectors.toList());
                 
                 allRecommendations.add(profileRecommendations);
-                System.out.println("Single profile final recommendations: " + profileRecommendations);
+//                System.out.println("Single profile final recommendations: " + profileRecommendations);
                 
             } else {
                 // Multiple profiles strategy: Separate calls for each profile
-                System.out.println("Multiple profiles detected - using separate calls for each profile");
+//                System.out.println("Multiple profiles detected - using separate calls for each profile");
                 
                 for (int i = 0; i < idealProfiles.size(); i++) {
                     NutrientProfile profile = idealProfiles.get(i);
                     NutritionGoal currentGoal = goals.get(i); // This mapping is correct since profiles are in same order as goals
-                    System.out.println("Processing profile " + (i + 1) + " with " + 
-                                     profile.getAllNutrients().size() + " nutrients" + " nutrientID in goal " + currentGoal.getnutrientId());
+//                    System.out.println("Processing profile " + (i + 1) + " with " + 
+//                                     profile.getAllNutrients().size() + " nutrients" + " nutrientID in goal " + currentGoal.getnutrientId());
             
                     // Create separate lists for this profile's goal only
                     List<Integer> profileNutrientIds = new ArrayList<>();
@@ -165,8 +164,8 @@ public class FoodRecommendation implements IFoodRecommendation{
                     List<GoalType> profileGoalTypes = new ArrayList<>();
                     profileGoalTypes.add(currentGoal.getgoalType());
                     
-                    System.out.println("  Profile " + (i + 1) + " nutrient IDs: " + profileNutrientIds);
-                    System.out.println("  Profile " + (i + 1) + " goal types: " + profileGoalTypes);
+//                    System.out.println("  Profile " + (i + 1) + " nutrient IDs: " + profileNutrientIds);
+//                    System.out.println("  Profile " + (i + 1) + " goal types: " + profileGoalTypes);
             
                     // Get matching ingredients for this profile using only its own nutrient ID and goal type
                     List<Integer> matchingIngredients = ingredientService.getIngredientMatchingNutrients(
@@ -176,7 +175,7 @@ public class FoodRecommendation implements IFoodRecommendation{
                         profileGoalTypes    // Pass only this profile's goal type as list
                     );
                     
-                    System.out.println("  Found " + matchingIngredients.size() + " matching ingredients for profile " + (i + 1));
+//                    System.out.println("  Found " + matchingIngredients.size() + " matching ingredients for profile " + (i + 1));
                     
                     // Score ingredients for this profile separately
                     List<ScoredIngredient> scoredIngredientsForProfile = new ArrayList<>();
@@ -192,11 +191,11 @@ public class FoodRecommendation implements IFoodRecommendation{
                         int ingredientFoodGroup = ingredientService.getFoodGroup(ingredientId);
                         if (ingredientFoodGroup == goalFoodGroup) {
                             score += FOOD_GROUP_BONUS;
-                            System.out.println("  Ingredient " + ingredientId + " gets food group bonus for profile " + (i + 1) + " (group: " + ingredientFoodGroup + ")");
-                        }
+//                            System.out.println("  Ingredient " + ingredientId + " gets food group bonus for profile " + (i + 1) + " (group: " + ingredientFoodGroup + ")");
+                      }
                         
                         scoredIngredientsForProfile.add(new ScoredIngredient(ingredientId, score));
-                        System.out.println("  Profile " + (i + 1) + " - Ingredient " + ingredientId + " scored: " + score);
+//                        System.out.println("  Profile " + (i + 1) + " - Ingredient " + ingredientId + " scored: " + score);
                     }
                     
                     // Sort this profile's scored ingredients and get top recommendations
@@ -207,21 +206,21 @@ public class FoodRecommendation implements IFoodRecommendation{
                         .collect(Collectors.toList());
                     
                     allRecommendations.add(profileRecommendations);
-                    System.out.println("  Profile " + (i + 1) + " final recommendations: " + profileRecommendations);
+//                    System.out.println("  Profile " + (i + 1) + " final recommendations: " + profileRecommendations);
                 }
             }
             
-            System.out.println("\n--- Final Result ---");
-            System.out.println("Returning " + allRecommendations.size() + " recommendation lists");
+//            System.out.println("\n--- Final Result ---");
+//            System.out.println("Returning " + allRecommendations.size() + " recommendation lists");
             for (int i = 0; i < allRecommendations.size(); i++) {
-                System.out.println("Result " + (i + 1) + " recommendations: " + allRecommendations.get(i));
+//                System.out.println("Result " + (i + 1) + " recommendations: " + allRecommendations.get(i));
             }
-            System.out.println("=== DEBUG: End getRecommendations ===\n");
-            
+//            System.out.println("=== DEBUG: End getRecommendations ===\n");
+//            
             return allRecommendations;
             
         } catch (Exception e) {
-            System.out.println("ERROR in getRecommendations: " + e.getMessage());
+//            System.out.println("ERROR in getRecommendations: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<>();
         }

@@ -2,6 +2,6 @@ package recommendation;
 
 public enum GoalType {
     INCREASE,
-    DECREASE,
-    MAINTAIN
+    DECREASE
+//    MAINTAIN
 }
