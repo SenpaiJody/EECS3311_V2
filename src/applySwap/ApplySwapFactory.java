@@ -6,7 +6,9 @@ package applySwap;
 public class ApplySwapFactory {
     
     /**
-     * Creates and returns an instance of IApplySwap
+     * Creates and returns a new ApplySwap instance.
+     * 
+     * @return A new IApplySwap implementation
      */
     public static IApplySwap createApplySwap() {
         return new ApplySwap();
