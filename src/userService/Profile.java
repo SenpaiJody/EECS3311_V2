@@ -28,6 +28,7 @@ public class Profile {
 		this.preferredUnit = preferredUnit;
 	};
 	
+	//setters
 	public void setGender(Gender g) {gender = g;}
 	public void setName(String n) {name = n;}
 	public void setDateOfBirth(LocalDate d) {dateOfBirth = d;}
@@ -35,7 +36,8 @@ public class Profile {
 	public void setWeight(double w) {weight = w;}
 	public void setPreferredUnit(Unit preferredUnit) {this.preferredUnit = preferredUnit;}
 	
-	
+
+	//getters
 	public int getID() {return profileID;}
 	public Gender getGender() {return gender;}
 	public String getName() {return name;}

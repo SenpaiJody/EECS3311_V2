@@ -36,15 +36,15 @@ public class MainWindow extends JFrame {
 		
 		init();
 		
-		
-		try {
-			UserServiceFactory.getService().attemptLogin("bobtest3", "mypassword");
-		} catch (IncorrectLoginException e) {
-			e.printStackTrace();
-		}
-		setPage(new ProfilePage());
-		
-		//setPage(new LoginRegistrationPage());
+//		
+//		try {
+//			UserServiceFactory.getService().attemptLogin("bobtest3", "mypassword");
+//		} catch (IncorrectLoginException e) {
+//			e.printStackTrace();
+//		}
+//		setPage(new ProfilePage());
+//		
+		setPage(new LoginRegistrationPage());
 		
 		//setPage(new FilterBuilderPanel());
 	}

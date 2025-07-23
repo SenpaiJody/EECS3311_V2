@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import database.CSVNutrientDB;
+
 //
 
 /**A proxy class that filters the nutrients retrieved, such that only a handful of nutrients are retrieved and the rest are ignored.
@@ -32,9 +34,9 @@ class FilteredNutrientServiceProxy implements INutrientService{
 	private static final int[] ALLOWED_NUTRIENT_IDS = new int[] {203, 204, 205, 208, 601, 307, 306, 301, 303, 401, 324};
 	private static final String[] NUTRIENT_NAME_LOOKUP = new String[] {"Protein", "Fats", "Carbohydrates", "Calories", "Cholesterol", "Sodium", "Potassium", "Calcium", "Iron", "Vitamin C", "Vitamin D"};
 	
-	INutrientService originalService;
+	CSVNutrientDB originalService;
 	
-	FilteredNutrientServiceProxy(INutrientService originalService){
+	FilteredNutrientServiceProxy(CSVNutrientDB originalService){
 		this.originalService = originalService;
 	};
 	

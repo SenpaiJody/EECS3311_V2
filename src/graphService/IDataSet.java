@@ -7,6 +7,11 @@ import java.util.TreeSet;
 
 import food.Food;
 
+/*IDataSet makes some standaridizations in that while the FoodData sets already have some
+ * data available, the CFG does not. Thus the methods are designed as such that when iterating
+ * over a List<IDataSet> object, the same function can be called for any dataset and get the desired result
+ */
+
 public interface IDataSet {
 
 	public String getLegendLabel();

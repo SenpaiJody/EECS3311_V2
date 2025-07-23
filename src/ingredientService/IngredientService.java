@@ -9,6 +9,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import nutrientScore.NutrientScorer;
+import nutrientScore.INutrientScorer;
+
 import nutrientService.INutrientService;
 import nutrientService.NutrientServiceFactory;
 import recommendation.GoalType;
@@ -23,7 +25,6 @@ import recommendation.GoalType;
  * <p> This allows the IUserDB to focus more on CRUD actions while still fulfilling the IIngredientService interface.
  * */
 public class IngredientService implements IIngredientService{
-	private static final boolean DESCREASES = false;
 
 	private IIngredientDB db;
 	
@@ -72,7 +73,7 @@ public class IngredientService implements IIngredientService{
 
 	    Map<Integer,Map<Integer,Double>> totalNutrientMapList = nutrientService.getNutrientsListPer100g(totalIngredientList);
 
-	    NutrientScorer scorer = new NutrientScorer();
+	    INutrientScorer scorer = new NutrientScorer();
 
 	    for (Map.Entry<Integer,Map<Integer,Double>> entry : totalNutrientMapList.entrySet()) {
 	        Map<Integer,Double> nutrientMap = entry.getValue();

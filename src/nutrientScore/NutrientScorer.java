@@ -2,13 +2,15 @@ package nutrientScore;
 
 import java.util.Map;
 
-public class NutrientScorer {
-	/*
-	 * algo for scoring the similarity of two sets of nutrients;
-	 * Computes the ratios of each nutrient in the food compared to the food's total nutritional value.
-	 * Then, the 
+public class NutrientScorer implements INutrientScorer{
+	/**
+	 * algo for scoring the similarity of two sets of nutrients
+	 * @param target - the nutrient map to be used as a criteria
+	 * @param trial - the nutrient map the user wishes to score
 	 * 
+	 * @returns - a score
 	 * */
+	@Override
 	public double scoreLikeness(Map<Integer,Double> target, Map<Integer,Double> trial) {
 		
 		
