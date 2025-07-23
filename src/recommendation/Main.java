@@ -25,13 +25,13 @@ public class Main {
        
         
         
-        NutritionGoal newGoal2 = goalManager.createGoal(
-                123,           // profileId
-                401,                     // nutrientId (e.g., protein)
-                100,                     // intensity (1-100)
-                GoalType.DECREASE,     // goalType
-                501841     // ingredientId
-            );
+//        NutritionGoal newGoal2 = goalManager.createGoal(
+//                123,           // profileId
+//                401,                     // nutrientId (e.g., protein)
+//                100,                     // intensity (1-100)
+//                GoalType.DECREASE,     // goalType
+//                501841     // ingredientId
+//            );
         
 //        boolean added2 = goalManager.addGoal(124, newGoal2);
 
