@@ -13,6 +13,13 @@ import nutriCalc.INutriCalc;
 import nutriCalc.NutrientProfile;
 import nutriCalc.NutritionFacade;
 
+
+/**
+ * Implementation of food recommendation system that provides ingredient suggestions
+ * based on nutrition goals. The system supports both single and multiple goal scenarios,
+ * maintains cached recommendations per profile, and applies food group bonuses for scoring.
+ */
+
 public class FoodRecommendation implements IFoodRecommendation{
     private static final double FOOD_GROUP_BONUS = 0.05;
     private INutriCalc nutritionCalculator = new NutritionFacade();
@@ -22,7 +29,14 @@ public class FoodRecommendation implements IFoodRecommendation{
     
     private Map<Integer, List<List<Integer>>> latestRecommendations = new HashMap<>();
     
-    
+    /**
+     * Event handler triggered when nutrition goals are updated for a profile.
+     * Updates cached recommendations and maintains ingredient index mappings.
+     * If no goals are provided, cleans up cached data for the profile.
+     * 
+     * @param profileId ID of the user profile whose goals changed
+     * @param updatedGoals List of new/updated nutrition goals, empty list removes cached data
+     */
  // Automatically triggered on goal changes
     @Override
     public void onGoalChanged(Integer profileId, List<NutritionGoal> updatedGoals) {
@@ -66,15 +80,39 @@ public class FoodRecommendation implements IFoodRecommendation{
         }
     }
     
+    
+    /**
+     * Retrieves the latest cached recommendations for a profile.
+     * 
+     * @param profileId ID of the user profile
+     * @return List of recommendation lists (one per ingredient goal), or empty list if no recommendations exist
+     */
     @Override
     public List<List<Integer>> getLatestRecommendations(int profileId) {
         return latestRecommendations.getOrDefault(profileId, new ArrayList<>());
     }
     
+    /**
+     * Public interface method for getting recommendations with default limit of 4.
+     * Delegates to the private implementation method with standard parameters.
+     * 
+     * @param goal List of nutrition goals to generate recommendations for
+     * @return List of lists containing recommended ingredient IDs, one list per goal
+     */
     // Main method - returns list of lists of recommended ingredient IDs
     public List<List<Integer>> getRecommendations(List <NutritionGoal> goal) {
         return getRecommendations(goal, 4); // Default limit of 4
     }
+    
+    
+    /**
+     * Core recommendation engine that processes nutrition goals and returns ingredient suggestions.
+     * Handles both single and multiple goal scenarios with different matching strategies.
+     * 
+     * @param goals List of nutrition goals to process
+     * @param limit Maximum number of recommendations per goal
+     * @return List of lists where each inner list contains ingredient IDs for one goal
+     */
     
     // Method to handle multiple goals
     private List<List<Integer>> getRecommendations(List<NutritionGoal> goals, int limit) {
@@ -227,10 +265,22 @@ public class FoodRecommendation implements IFoodRecommendation{
     }
 
     
+    
+    /**
+     * Private helper class for pairing ingredient IDs with their calculated scores.
+     * Used internally during the recommendation scoring and ranking process.
+     */
     // Private nested class for internal scoring
     private static class ScoredIngredient {
         final int ingredientId;
         final double score;
+        
+        /**
+         * Creates a new scored ingredient pair.
+         * 
+         * @param ingredientId The ingredient ID
+         * @param score The calculated score for ranking
+         */
         
         ScoredIngredient(int ingredientId, double score) {
             this.ingredientId = ingredientId;
