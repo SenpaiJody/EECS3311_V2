@@ -34,7 +34,7 @@ class FilteredNutrientServiceProxy implements INutrientService{
 	private static final int[] ALLOWED_NUTRIENT_IDS = new int[] {203, 204, 205, 208, 601, 307, 306, 301, 303, 401, 324};
 	private static final String[] NUTRIENT_NAME_LOOKUP = new String[] {"Protein", "Fats", "Carbohydrates", "Calories", "Cholesterol", "Sodium", "Potassium", "Calcium", "Iron", "Vitamin C", "Vitamin D"};
 	
-	CSVNutrientDB originalService;
+	private CSVNutrientDB originalService;
 	
 	FilteredNutrientServiceProxy(CSVNutrientDB originalService){
 		this.originalService = originalService;

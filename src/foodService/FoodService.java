@@ -12,7 +12,7 @@ import userService.UserServiceFactory;
  * */
 class FoodService implements IFoodService{
 	
-	IFoodDB db;
+	private IFoodDB db;
 	FoodService(IFoodDB implementation){
 		this.db = implementation;
 	}
