@@ -18,7 +18,6 @@ import food.Food;
  *  getNutrientByDate uses  List<Map.Entry<LocalDate, Double>> because each tuple is Date, Amount (of nutrient)
  */
 
-
 public class NutrientByDateMode extends GraphMode implements IGraphMode, LineGraph {
 
 	int nutrientChoice;
@@ -35,7 +34,9 @@ public class NutrientByDateMode extends GraphMode implements IGraphMode, LineGra
 	            List<Food> foodList = inidvidualSet.getFoodList();
 	            addDates(foodList);
 	        }
-
+	    
+	    if (uniqueDates.isEmpty()) {populateDefaultDates(dataSets);	}
+	    
 	    for (IDataSet individualSet : dataSets) {
 
 	    	List<Map.Entry<LocalDate, Double>> nutrientByDateList = individualSet.getNutrientByDateList(uniqueDates, nutrientChoice);
@@ -58,7 +59,6 @@ public class NutrientByDateMode extends GraphMode implements IGraphMode, LineGra
 	    JFreeChart chart = formatLineGraph(dataset, nutrientAmtByDateTitle, nutrientChoice);
 
 	    return chart;
-
 	}
 
 	@Override

@@ -35,8 +35,6 @@ public class MultiPiePlot extends Plot {
         return "Multi Pie Chart with Titles";
     }
 
-
-
     @Override
 	@SuppressWarnings("rawtypes")
 	public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
@@ -62,6 +60,9 @@ public class MultiPiePlot extends Plot {
                 widthPerPlot, area.getHeight() - titleHeight
             );
 
+            g2.setFont(titleFont);
+            g2.setColor(Color.BLACK);
+            
             // Center and draw the title
             float titleX = (float)(plotArea.getCenterX() - fm.stringWidth(title) / 2.0);
             g2.drawString(title, titleX, titleY);

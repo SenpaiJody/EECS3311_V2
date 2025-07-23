@@ -1,6 +1,7 @@
 package graphService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -13,12 +14,15 @@ public class FoodDataSet implements IDataSet {
 
 	String legendLabel;
 	List<Food> foodList;
+	List<LocalDate> defaultDateList;
 
     IVisualCalculationService visualCalc = VisualCalculationServiceFactory.getService();
 
 	public FoodDataSet (String legendLabel, List<Food> foodList) {
 		this.legendLabel = legendLabel;
 		this.foodList = foodList;
+		this.defaultDateList = new ArrayList<>();
+		defaultDateList.add(LocalDate.of(1970, 1, 1));
 	}
 
 	@Override
@@ -56,6 +60,9 @@ public class FoodDataSet implements IDataSet {
 
 		return foodListNutrientAmounts;
 	}
+
+	@Override
+	public List<LocalDate> getDefaultDateList() { return defaultDateList; }
 
 
 }

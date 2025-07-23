@@ -21,15 +21,31 @@ public class CFGDataSet implements IDataSet {
 	Gender gender;
 	int age;
 	ICFGNutrientRecService CFGNutrientRecService;
+	LocalDate dateStart;
+	LocalDate dateEnd;
+	List<LocalDate> defaultDateList;
 
-	public CFGDataSet(String legendLabel, Profile profile) {
+	public CFGDataSet(String legendLabel, Profile profile, LocalDate dateStart, LocalDate dateEnd) {
 		this.legendLabel = legendLabel;
 		this.profile = profile;
 		this.gender = profile.getGender();
 		this.age = Period.between(profile.getDateOfBirth(),LocalDate.now()).getYears();
 		this.CFGNutrientRecService = CFGNutrientRecServiceFactory.getService();
+		this.dateStart = dateStart;
+		this.dateEnd = dateEnd;
+		this.defaultDateList = new ArrayList<>();
+		populateDefaultDateList();
 	}
 
+	private void populateDefaultDateList() {
+		
+		LocalDate curr = dateStart;
+		while (!curr.isAfter(dateEnd)) {
+	        defaultDateList.add(curr);
+	        curr = curr.plusDays(1);
+		}
+	}
+	
 	@Override
 	public String getLegendLabel() { return legendLabel; }
 
@@ -42,6 +58,9 @@ public class CFGDataSet implements IDataSet {
 
 		return foodList; }
 
+	@Override
+	public List<LocalDate> getDefaultDateList() { return defaultDateList; }
+	
 	@Override
 	public List<Map.Entry<LocalDate, Double>> getNutrientByDateList (TreeSet<LocalDate> uniqueDates, int nutrientChoice) {
 
@@ -78,6 +97,8 @@ public class CFGDataSet implements IDataSet {
 
 		return CFGNutrientTotalMap;
 	}
+
+
 
 
 }

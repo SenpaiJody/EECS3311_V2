@@ -8,8 +8,8 @@ import org.jfree.data.general.DefaultPieDataset;
 public interface PieGraph {
 
 
-	public void populateFoodGroupPieGraphDataset(DefaultPieDataset<String> dataset, Map<String, Double> foodGroupPercentages);
+	public void populateFoodGroupPieGraphDataset(DefaultPieDataset dataset, Map<String, Double> foodGroupPercentages);
 
-	@SuppressWarnings("rawtypes")
-	public PiePlot formatPiePlot(DefaultPieDataset<String> dataset);
+
+	public PiePlot formatPiePlot(DefaultPieDataset dataset);
 }

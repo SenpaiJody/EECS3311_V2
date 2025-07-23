@@ -31,7 +31,7 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
             addDates(foodList);
 
             Map<String, Double> foodGroupPercentages = individualSet.getFoodGroupPercentages();
-			DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+			DefaultPieDataset dataset = new DefaultPieDataset<>();
 			String legendLabel = individualSet.getLegendLabel();
 			populateFoodGroupPieGraphDataset(dataset, foodGroupPercentages);
 			PiePlot plot = formatPiePlot(dataset);
@@ -40,9 +40,20 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 
 			MultiPiePlot multiPlot = new MultiPiePlot(plotsWithTitles);
 
-			LocalDate dateStart = uniqueDates.isEmpty() ? null : uniqueDates.first();
-			LocalDate dateEnd = uniqueDates.isEmpty() ? null : uniqueDates.last();
-
+			LocalDate dateStart;
+			LocalDate dateEnd;	
+			
+			if(!uniqueDates.isEmpty()) {
+				 dateStart = uniqueDates.first();
+				 dateEnd = uniqueDates.last();
+			} else {
+				IDataSet defaultDataSet =  dataSets.get(0);			
+				List<LocalDate> defaultDateList = new ArrayList<>();
+				defaultDateList = defaultDataSet.getDefaultDateList();
+				dateStart = defaultDateList.get(0);
+				dateEnd = defaultDateList.get(defaultDateList.size()-1);
+			}
+			
 		JFreeChart chart = new JFreeChart(
 				FoodGroupIntakeTitle + " " + dateStart.toString() + " to " + dateEnd.toString(),
 			    new Font("SansSerif", Font.BOLD, 18),
@@ -54,7 +65,7 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 		 }
 
 	@Override
-	public void populateFoodGroupPieGraphDataset(DefaultPieDataset<String> dataset, Map<String, Double> foodGroupPercentages) {
+	public void populateFoodGroupPieGraphDataset(DefaultPieDataset dataset, Map<String, Double> foodGroupPercentages) {
 	    for (Map.Entry<String, Double> entry : foodGroupPercentages.entrySet()) {
 	        String foodGroupName = entry.getKey();
 	        Double percentage = entry.getValue();
@@ -64,7 +75,7 @@ public class FoodGroupMode extends GraphMode implements IGraphMode, PieGraph{
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public PiePlot formatPiePlot(DefaultPieDataset<String> dataset) {
+	public PiePlot formatPiePlot(DefaultPieDataset dataset) {
 	    Font labelFont = new Font("SansSerif", Font.PLAIN, 10);
 
 	    PiePlot plot = new PiePlot(dataset);

@@ -3,6 +3,7 @@ package graphService;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -47,15 +48,25 @@ public abstract class GraphMode implements IGraphMode{
     	this.uniqueDates = new TreeSet<>();
     }
 
-    protected void addDates(List<Food> foodList) {
+    @Override
+    public void addDates(List<Food> foodList) {
             for (Food food : foodList) {
                 if (food != null && food.getDate() != null) {
                     uniqueDates.add(food.getDate());
                 }
             }
         }
-
-    protected String getNutrientAmtTag (int nutrientID) {
+    
+    @Override
+    public void populateDefaultDates(List<IDataSet> dataSets) {	
+	    for (IDataSet inidvidualSet : dataSets) {
+	        List<LocalDate> defaultDateList = inidvidualSet.getDefaultDateList();
+	        uniqueDates.addAll(defaultDateList);
+	    }
+    }
+    
+    @Override
+    public String getNutrientAmtTag (int nutrientID) {
 
         String name = nutrientService.getNutrientName(nutrientID);
         String unit = nutrientService.getNutrientUnit(nutrientID);
