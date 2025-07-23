@@ -28,7 +28,7 @@ public interface IUserService {
 	 * */
 	public void attemptLogin(String UserID, String password) throws IncorrectLoginException;
 	
-	/** Updates the provided user in the database.
+	/** Updates the provided user's saved data to match the new object.
 	 * 
 	 * @throws UserDoesNotExistException if the user does not exist.
 	 * */

@@ -10,7 +10,7 @@ import userService.UserServiceFactory;
 /**An implementation of the IFoodService interface that uses an IFoodDB object to provide services.
  * 
  * */
-public class FoodService implements IFoodService{
+class FoodService implements IFoodService{
 	
 	IFoodDB db;
 	FoodService(IFoodDB implementation){
