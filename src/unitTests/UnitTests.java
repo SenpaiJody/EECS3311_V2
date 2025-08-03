@@ -43,6 +43,7 @@ import recommendation.NutritionGoalManager;
 import userService.IUserService;
 import userService.IncorrectLoginException;
 import userService.Profile;
+import userService.ProfileData;
 import userService.ProfileDoesNotExistException;
 import userService.User;
 import userService.UserServiceFactory;
@@ -473,13 +474,16 @@ public class UnitTests {
 	    public void UnitTest7_0() {
 	    
 	    		
-		Profile testProfileAdultFemale = new Profile(
-			    1,                                 // id
-			    "Jane Doe",                        // name
-			    Profile.Gender.FEMALE,                    // gender (assuming an enum Gender.FEMALE exists)
+		ProfileData janeDoeData = new ProfileData(
+				Profile.Gender.FEMALE,                    // gender (assuming an enum Gender.FEMALE exists)
 			    LocalDate.of(1990, 5, 15),         // date of birth (e.g., May 15, 1990)
 			    165.0,                             // height in cm (assuming metric)
-			    60.0,                              // weight in kg
+			    60.0                              // weight in kg
+				);
+		 
+		Profile testProfileAdultFemale = new Profile(
+			    "Jane Doe",                        // name
+			    janeDoeData,
 			    Profile.Unit.METRIC                        // preferred unit (assuming Unit.METRIC is valid)
 			);		
 	    		
