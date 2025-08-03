@@ -14,20 +14,19 @@ public class Profile {
 	private double height;
 	private Unit preferredUnit = Unit.METRIC;
 	
-	public Profile(String name, ProfileData data, Unit preferredUnit) {
-		this(UserServiceFactory.getService().generateProfileID(), name, data, preferredUnit);
+	public Profile(String name, Gender gender, LocalDate DoB, double height, double weight, Unit preferredUnit) {
+		this(UserServiceFactory.getService().generateProfileID(), name, gender, DoB, height, weight, preferredUnit);
 	};
 	
-	public Profile(int id, String name, ProfileData data, Unit preferredUnit) {
+	public Profile(int id, String name, Gender gender, LocalDate DoB, double height, double weight, Unit preferredUnit) {
 		this.profileID = id;
 		this.name = name;
-		this.gender = data.getGender();
-		this.dateOfBirth = data.getDateOfBirth();
-		this.height = data.getHeight();
-		this.weight = data.getWeight();
+		this.gender = gender;
+		this.dateOfBirth = DoB;
+		this.height = height;
+		this.weight = weight;
 		this.preferredUnit = preferredUnit;
 	};
-	
 	
 	//setters
 	public void setGender(Gender g) {gender = g;}

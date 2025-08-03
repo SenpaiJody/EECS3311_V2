@@ -24,7 +24,6 @@ import GUI.GUIPanelBase;
 import userService.Profile;
 import userService.Profile.Gender;
 import userService.Profile.Unit;
-import userService.ProfileData;
 
 //The pane that displays profile data that can be edited.
 public class ProfileDetailsPanel extends GUIPanelBase implements ItemListener{
@@ -187,10 +186,7 @@ public class ProfileDetailsPanel extends GUIPanelBase implements ItemListener{
 	
 	public Profile getNewProfile() throws ProfileNoNameException, TooYoungException {
 		validateForm();
-		
-		ProfileData profileData = new ProfileData(getUserGender(),getUserDoB(), getUserHeight(), getUserWeight());
-		
-		return new Profile(getUserName(),profileData, getUserPreferredUnit());
+		return new Profile(getUserName(),getUserGender(),getUserDoB(), getUserHeight(), getUserWeight(), getUserPreferredUnit());
 	}
 	//matches the provided profile to the data described in the ProfileDEtailsPanel
 	public void editProfile(Profile p) throws ProfileNoNameException, TooYoungException {

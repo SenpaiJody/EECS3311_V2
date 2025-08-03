@@ -13,7 +13,6 @@ import userService.Profile;
 import userService.User;
 import userService.Profile.Gender;
 import userService.Profile.Unit;
-import userService.ProfileData;
 
 
 /**A CSV implementation of {@link IUserDB}
@@ -117,9 +116,7 @@ public class CSVUserDB implements IUserDB{
 					
 					LocalDate dateOfBirth = LocalDate.of(Integer.parseInt(dateString[0]), Integer.parseInt(dateString[1]), Integer.parseInt(dateString[2]));
 					
-					ProfileData data = new ProfileData(gender ,dateOfBirth,height,weight);
-					
- 					profiles.add(new Profile(profileID, name,data, unit));
+ 					profiles.add(new Profile(profileID, name, gender ,dateOfBirth,height,weight, unit));
  					
  					ids.remove(i);
 					break;

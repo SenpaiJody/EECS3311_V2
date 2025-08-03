@@ -11,7 +11,6 @@ import userService.IncorrectLoginException;
 import userService.Profile;
 import userService.Profile.Gender;
 import userService.Profile.Unit;
-import userService.ProfileData;
 import userService.ProfileDoesNotExistException;
 import userService.UserAlreadyExistsException;
 import userService.UserDoesNotExistException;
@@ -117,8 +116,7 @@ class Test_UserService {
 		
 		int oldAmountOfProfiles = service.getCurrentUser().getProfiles().size();
 		
-		ProfileData bobsWifeStats = new ProfileData(Gender.FEMALE, LocalDate.of(1980, 2, 12), 150, 70);
-		Profile toBeAdded = new Profile(service.generateProfileID(), "Bob's Wife", bobsWifeStats, Unit.METRIC);
+		Profile toBeAdded = new Profile(service.generateProfileID(), "Bob's Wife", Gender.FEMALE, LocalDate.of(1980, 2, 12), 150, 70, Unit.METRIC);
 		
 		var BobsProfiles = service.getCurrentUser().getProfiles();
 		BobsProfiles.add(toBeAdded);

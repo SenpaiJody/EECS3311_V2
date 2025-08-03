@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVReader;
-
 //TODO: consider moving this to a library for Deliverable 3.
 /**A "Utility" class providing frequently used functions
  * */
@@ -63,14 +60,44 @@ class CSVDatabaseUtilities {
 	 * @return The string split by delimiting commas
 	 * */
 	static String[] smartSplit(String s) {
-			CSVParser parser = new CSVParser();
-			String[] result = null;
-			try {
-				result = parser.parseLine(s);
-			} catch (IOException e) {
-				throw new IllegalArgumentException("input string is not a comma-separated string");
+			List<String> result = new ArrayList<String>();
+			StringBuilder sb = new StringBuilder();
+			boolean inQuotes = false;
+			boolean justReadQuote = false;
+			
+			for (char c : s.toCharArray()) {
+				if (c == '"')
+				{
+					if (justReadQuote) {	
+						inQuotes = true;
+						justReadQuote = false;			
+						sb.append('"');
+					}
+					else if (!inQuotes) {
+						inQuotes = true;
+						justReadQuote = true;
+					}
+					else {
+						justReadQuote = true;
+						inQuotes = false;
+					}
+				}
+				else if (justReadQuote) {
+					justReadQuote = false;
+				}
+				
+				
+				if (c == ',' && !inQuotes) {
+					result.add(sb.toString());
+					sb = new StringBuilder();
+					
+				}
+				if ((c != ',' || inQuotes) && c !='"')
+					sb.append(c);
 			}
-			return result;
+			result.add(sb.toString());
+			String[] casted = new String[result.size()];
+			return result.toArray(casted);
 		}
 	
 	/** Returns a StringBuilder that contains each line of the provided file, iff that line passes the provided predicate
