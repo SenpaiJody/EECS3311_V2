@@ -62,16 +62,16 @@ public class CSVNutrientDB implements INutrientService {
 		    while ((line = br.readLine()) != null) {
 				String[] elements = line.split(",");
 				for (int i =0; i < ingredientIDs.size(); i++) {
-					if (ingredientIDs.contains(Integer.parseInt(elements[0]))) {
-						Integer id = Integer.parseInt(elements[1]);
-						Double quantity = Double.parseDouble(elements[2]);
-						if(quantity > 0) {
-							if (map.containsKey(id))
-								map.replace(id, map.get(id) + quantity);
-							else
-								map.put(id, quantity);
-						}
-					}
+					if (!ingredientIDs.contains(Integer.parseInt(elements[0])))
+						continue;
+					Double quantity = Double.parseDouble(elements[2]);
+					if (quantity <=0)
+						continue;
+					Integer id = Integer.parseInt(elements[1]);
+					if (map.containsKey(id))
+						map.replace(id, map.get(id) + quantity);
+					else
+						map.put(id, quantity);
 				}
 				if (ingredientIDs.size() == 0)
 					break;
