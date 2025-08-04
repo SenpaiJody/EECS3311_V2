@@ -13,8 +13,8 @@ class UserService implements IUserService{
 		db = implementation;
 	}
 	
-	User currentUser;
-	Profile currentProfile;
+	private User currentUser;
+	private Profile currentProfile;
 	
 	@Override
 	public User getCurrentUser() {

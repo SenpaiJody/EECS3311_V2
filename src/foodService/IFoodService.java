@@ -6,7 +6,7 @@ import food.FoodType;
 import food.Food;
 
 /** Interface that defines the methods that a service that deals with Foods has
- * 
+ * This Interface assumes that a user has already logged in.
  * These should be instantiated from the FoodServiceFactory class
  * 
  * @see {@link FoodServiceFactory#getService()}
