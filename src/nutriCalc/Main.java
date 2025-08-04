@@ -23,7 +23,7 @@ public class Main {
 
         // Sample ingredients
         Map<Integer, Double> pancakeIngredients = new HashMap<>();
-        pancakeIngredients.put(567, 100.0);
+        pancakeIngredients.put(92, 100.0);
 //        pancakeIngredients.put(2, 250.0);
 //        pancakeIngredients.put(3, 2.0);
 
