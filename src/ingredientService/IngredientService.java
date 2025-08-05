@@ -9,8 +9,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import nutrientScore.NutrientScorer;
-import nutrientScore.INutrientScorer;
-
 import nutrientService.INutrientService;
 import nutrientService.NutrientServiceFactory;
 import recommendation.GoalType;
@@ -25,6 +23,7 @@ import recommendation.GoalType;
  * <p> This allows the IUserDB to focus more on CRUD actions while still fulfilling the IIngredientService interface.
  * */
 public class IngredientService implements IIngredientService{
+	private static final boolean DESCREASES = false;
 
 	private IIngredientDB db;
 	
@@ -62,51 +61,14 @@ public class IngredientService implements IIngredientService{
 	        return pair1.getValue() - pair2.getValue() > 0 ? -1 : 1;
 	    });
 
-	    IIngredientIterator iterator = db.getIterator();
-	    INutrientService nutrientService = NutrientServiceFactory.getService();
-
-	    List<Integer> totalIngredientList = new ArrayList<Integer>();
-	    while (iterator.hasNext()) {
-	        totalIngredientList.add(iterator.getID());
-	        iterator.next();
-	    }
-
-	    Map<Integer,Map<Integer,Double>> totalNutrientMapList = nutrientService.getNutrientsListPer100g(totalIngredientList);
-
-	    INutrientScorer scorer = new NutrientScorer();
+	    Map<Integer,Map<Integer,Double>> totalNutrientMapList = getAllIngredientNutrients();
+	    NutrientScorer scorer = new NutrientScorer();
 
 	    for (Map.Entry<Integer,Map<Integer,Double>> entry : totalNutrientMapList.entrySet()) {
 	        Map<Integer,Double> nutrientMap = entry.getValue();
 
-	        // Filter: Skip scoring if any of the specific nutrients don't meet their goal criteria
-	        boolean skipIngredient = false;
-	        
-	        if (nutrientID != null && type != null) {
-	            for (int i = 0; i < nutrientID.size(); i++) {
-	                Integer currentNutrientID = nutrientID.get(i);
-	                GoalType currentGoalType = type.get(i);
-	                
-	                double targetValue = target.get(currentNutrientID);
-	                double trialValue = nutrientMap.get(currentNutrientID);
-	                
-	                if (currentGoalType == GoalType.DECREASE) {
-	                    // For DECREASE: we want trial < target (ingredient has less of this nutrient)
-	                    if (trialValue > targetValue) {
-	                        skipIngredient = true;
-	                        break; // Exit the loop early if any condition fails
-	                    }
-	                } else if (currentGoalType == GoalType.INCREASE) {
-	                    // For INCREASE: we want trial > target (ingredient has more of this nutrient)  
-	                    if (trialValue < targetValue) {
-	                        skipIngredient = true;
-	                        break; // Exit the loop early if any condition fails
-	                    }
-	                }
-	            }
-	        }
-	        
-	        if (skipIngredient) {
-	            continue; // Skip this ingredient if it doesn't meet any of the goal criteria
+	        if (shouldSkipIngredient(nutrientMap, target, nutrientID, type)) {
+	            continue;
 	        }
 
 	        double score = scorer.scoreLikeness(target, nutrientMap);
@@ -144,7 +106,49 @@ public class IngredientService implements IIngredientService{
 	    return getIngredientMatchingNutrients(target, maxResults, nutrientList, typeList);
 	}
 	
+	private Map<Integer,Map<Integer,Double>> getAllIngredientNutrients() {
+	    IIngredientIterator iterator = db.getIterator();
+	    INutrientService nutrientService = NutrientServiceFactory.getService();
+
+	    List<Integer> totalIngredientList = new ArrayList<Integer>();
+	    while (iterator.hasNext()) {
+	        totalIngredientList.add(iterator.getID());
+	        iterator.next();
+	    }
+
+	    return nutrientService.getNutrientsListPer100g(totalIngredientList);
+	}
 	
+	// EXTRACTED: Filtering logic (decomposed from complex conditional)
+	private boolean shouldSkipIngredient(Map<Integer,Double> nutrientMap, Map<Integer, Double> target,
+	                                   List<Integer> nutrientID, List<GoalType> type) {
+	    if (nutrientID == null || type == null) {
+	        return false;
+	    }
+	    
+	    for (int i = 0; i < nutrientID.size(); i++) {
+	        if (doesNotMeetGoalCriteria(nutrientMap, target, nutrientID.get(i), type.get(i))) {
+	            return true;
+	        }
+	    }
+	    
+	    return false;
+	}
+	
+	// EXTRACTED: Individual goal checking logic
+	private boolean doesNotMeetGoalCriteria(Map<Integer,Double> nutrientMap, Map<Integer, Double> target,
+	                                       Integer currentNutrientID, GoalType currentGoalType) {
+	    double targetValue = target.get(currentNutrientID);
+	    double trialValue = nutrientMap.get(currentNutrientID);
+	    
+	    if (currentGoalType == GoalType.DECREASE) {
+	        return trialValue > targetValue;
+	    } else if (currentGoalType == GoalType.INCREASE) {
+	        return trialValue < targetValue;
+	    }
+	    
+	    return false;
+	}
 	
 	/* An implementation using a searchTrie (initialized on construction) to
 	 * search for the best ingredient that matches the name.
