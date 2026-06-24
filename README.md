@@ -1,5 +1,5 @@
 # EECS3311_V2
-Version 2 of this repository
+A project made for a System Design Course at York University during the Summer of 2025
 
 # TO RUN THE PROJECT, ENSURE JFREECHART IS INSTALLED AND RUN src/GUI/Main.java
 ### An account that already has quite a bit of data: 
